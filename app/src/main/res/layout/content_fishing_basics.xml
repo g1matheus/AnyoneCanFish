@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".FishingBasicsActivity"
+    tools:showIn="@layout/activity_fishing_basics">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="4"
+        >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/btnBasicEquipment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/basics_whatyouneed"
+                android:src="@drawable/what_need_first_image"
+                android:scaleType="centerCrop" />
+
+            <View
+                android:id="@drawable/scrim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/scrim" />
+
+            <TextView
+                android:id="@+id/tvBasicEquipment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/adamina"
+                android:textColor="@color/paper_300"
+                android:textSize="24sp"
+                android:text="@string/basics_whatyouneed"
+                tools:text="Basic Equipment" />
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
+            <ImageView
+                android:id="@+id/btnHowToFish"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/how_to_fish"
+                android:contentDescription="@string/basics_howtofish"/>
+            <View
+                android:id="@drawable/scrim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/scrim"/>
+            <TextView
+                android:id="@+id/tvHowToFish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/adamina"
+                android:textColor="@color/paper_300"
+                android:textSize="24sp"
+                android:text="@string/basics_howtofish"
+                tools:text="How To Fish" />
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
+            <ImageView
+                android:id="@+id/btnRulesResources"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/guidlines"
+                android:contentDescription="@string/basics_rulesresources"/>
+            <View
+                android:id="@drawable/scrim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/scrim"/>
+            <TextView
+                android:id="@+id/tvRulesResources"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/adamina"
+                android:textColor="@color/paper_300"
+                android:textSize="24sp"
+                android:text="@string/basics_rulesresources"
+                tools:text="Rules Resources" />
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
+            <ImageView
+                android:id="@+id/btnMaintenanceTips"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/bobber"
+                android:contentDescription="@string/basics_maintenance"/>
+            <View
+                android:id="@drawable/scrim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/scrim"/>
+            <TextView
+                android:id="@+id/tvMaintenanceTips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/adamina"
+                android:textColor="@color/paper_300"
+                android:textSize="24sp"
+                android:text="@string/basics_maintenance"
+                tools:text="Maintenance Tips" />
+        </FrameLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="4">
+    <android.support.design.card.MaterialCardView
+        android:id="@+id/mcFishingBasics"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="1dp"
+        app:cardBackgroundColor="@color/paper_500"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="2dp"
+        app:cardPreventCornerOverlap="true">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <ImageView
+                android:id="@+id/btnFishingBasics"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/fishing_basics"
+                android:contentDescription="@string/title_activity_fishing_basics"
+                android:scaleType="centerCrop" />
+
+            <View
+                android:id="@drawable/scrim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/scrim" />
+
+            <TextView
+                android:id="@+id/tvFishingBasics"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/text_margin_small"
+                android:layout_marginBottom="@dimen/text_margin_small"
+                android:fontFamily="@font/adamina"
+                android:gravity="bottom|start"
+                android:text="@string/main_btn_fishing_basics"
+                android:textColor="@color/paper_300"
+                android:textSize="26sp"
+                tools:text="Fishing Basics" />
+        </FrameLayout>
+    </android.support.design.card.MaterialCardView>
+
+    <android.support.design.card.MaterialCardView
+        android:id="@+id/mcGameFish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="1dp"
+        app:cardBackgroundColor="@color/paper_500"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="2dp"
+        app:cardPreventCornerOverlap="true">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/btnGameFish"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/title_activity_game_fish"
+                android:scaleType="centerCrop"
+                android:src="@drawable/game_fish" />
+
+            <View
+                android:id="@drawable/scrim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/scrim" />
+
+            <TextView
+                android:id="@+id/tvGameFish"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/text_margin_small"
+                android:layout_marginBottom="@dimen/text_margin_small"
+                android:fontFamily="@font/adamina"
+                android:gravity="bottom|start"
+                android:text="@string/main_btn_game_fish"
+                android:textColor="@color/paper_300"
+                android:textSize="26sp"
+                tools:text="Game Fish of North America" />
+        </FrameLayout>
+
+    </android.support.design.card.MaterialCardView>
+
+    <android.support.design.card.MaterialCardView
+        android:id="@+id/mcFishingTrips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="1dp"
+        app:cardBackgroundColor="@color/paper_500"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="2dp"
+        app:cardPreventCornerOverlap="true">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/btnFishingTrips"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/title_activity_fishing_trips"
+                android:scaleType="centerCrop"
+                android:src="@drawable/fishing_trips" />
+
+            <View
+                android:id="@drawable/scrim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/scrim" />
+
+            <TextView
+                android:id="@+id/tvFishingTrips"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/text_margin_small"
+                android:layout_marginBottom="@dimen/text_margin_small"
+                android:fontFamily="@font/adamina"
+                android:gravity="bottom|start"
+                android:text="@string/main_btn_mytrips"
+                android:textColor="@color/paper_300"
+                android:textSize="26sp"
+                tools:text="Fishing Trips" />
+        </FrameLayout>
+    </android.support.design.card.MaterialCardView>
+
+    <android.support.design.card.MaterialCardView
+        android:id="@+id/mcTackleBoxes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="1dp"
+        app:cardBackgroundColor="@color/paper_500"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="2dp"
+        app:cardPreventCornerOverlap="true">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/btnTackleBoxes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/title_activity_tackle_boxes"
+                android:scaleType="centerCrop"
+                android:src="@drawable/t_b_closed_smallbrown" />
+
+            <View
+                android:id="@drawable/scrim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/scrim" />
+
+            <TextView
+                android:id="@+id/tvTackleBoxes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/text_margin_small"
+                android:layout_marginBottom="@dimen/text_margin_small"
+                android:fontFamily="@font/adamina"
+                android:gravity="bottom|start"
+                android:text="@string/title_activity_tackle_boxes"
+                android:textColor="@color/paper_300"
+                android:textSize="26sp"
+                tools:text="My Tackle" />
+        </FrameLayout>
+    </android.support.design.card.MaterialCardView>
+
+</LinearLayout>

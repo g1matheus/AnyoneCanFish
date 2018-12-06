@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.homebrewforlife.sharkydart.anyonecanfish">
+
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality. 
+    -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COURSE_LOCATION" />
+    <!-- Needed only if your app targets Android 5.0 (API level 21) or higher. -->
+    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-feature android:name="android.hardware.location.network" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/fish_circle_002"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/fish_circle_002"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <activity android:name=".MapsActivity"
+            android:launchMode="singleTop"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Services -->
+        <service
+            android:name=".services.LocationService"
+            android:exported="false" />
+        <service
+            android:name=".services.WeatherInfoService"
+            android:exported="false" />
+        <service
+            android:name=".services.GetForecastDataService"
+            android:exported="false" />
+        <service
+            android:name=".services.GetSolunarDataService"
+            android:exported="false" />
+        <!-- <service android:name=".services.FirebaseService" android:exported="false" /> -->
+
+        <activity
+            android:name=".GameFishActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"
+            android:label="@string/title_activity_game_fish"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.homebrewforlife.sharkydart.anyonecanfish.MainActivity" />
+        </activity>
+        <activity
+            android:name=".FishingBasicsActivity"
+            android:launchMode="singleTop"
+            android:label="@string/title_activity_fishing_basics"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.homebrewforlife.sharkydart.anyonecanfish.MainActivity" />
+        </activity>
+        <activity
+            android:name=".FishingTripsActivity"
+            android:windowSoftInputMode="stateUnchanged"
+            android:launchMode="singleTop"
+            android:label="@string/title_activity_fishing_trips"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.homebrewforlife.sharkydart.anyonecanfish.MainActivity" />
+        </activity>
+        <activity
+            android:name=".FishEventsActivity"
+            android:windowSoftInputMode="stateUnchanged"
+            android:label="@string/title_activity_fish_events"
+            android:parentActivityName=".FishingTripsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.homebrewforlife.sharkydart.anyonecanfish.FishingTripsActivity" />
+        </activity>
+        <activity
+            android:name=".TackleBoxesActivity"
+            android:launchMode="singleTop"
+            android:label="@string/title_activity_tackle_boxes"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.homebrewforlife.sharkydart.anyonecanfish.MainActivity" />
+        </activity>
+         <activity
+             android:name=".LuresActivity"
+             android:windowSoftInputMode="stateUnchanged"
+             android:launchMode="singleTop"
+             android:label="@string/title_activity_lures"
+             android:parentActivityName=".TackleBoxesActivity"
+             android:theme="@style/AppTheme.NoActionBar">
+             <meta-data
+                 android:name="android.support.PARENT_ACTIVITY"
+                 android:value="com.homebrewforlife.sharkydart.anyonecanfish.TackleBoxesActivity" />
+         </activity>
+
+        <receiver android:name=".widget.FishingWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/fishing_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".widget.FishingWidgetRVService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <activity
+            android:name=".BasicEquipment_Activity"
+            android:launchMode="singleTop"
+            android:label="@string/title_activity_basic_equipment"
+            android:parentActivityName=".FishingBasicsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.homebrewforlife.sharkydart.anyonecanfish.FishingBasicsActivity" />
+        </activity>
+        <activity
+            android:name=".HowToFish_Activity"
+            android:launchMode="singleTop"
+            android:label="@string/title_activity_how_to_fish_"
+            android:parentActivityName=".FishingBasicsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.homebrewforlife.sharkydart.anyonecanfish.FishingBasicsActivity" />
+        </activity>
+        <activity
+            android:name=".Maintenance_Activity"
+            android:launchMode="singleTop"
+            android:label="@string/title_activity_maintenance_"
+            android:parentActivityName=".FishingBasicsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.homebrewforlife.sharkydart.anyonecanfish.FishingBasicsActivity" />
+        </activity>
+    </application>
+
+</manifest>

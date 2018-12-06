@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "160212343251",
+    "firebase_url": "https://capstoneproject-48112.firebaseio.com",
+    "project_id": "capstoneproject-48112",
+    "storage_bucket": "capstoneproject-48112.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:160212343251:android:cf505e3b89349b75",
+        "android_client_info": {
+          "package_name": "com.homebrewforlife.sharkydart.anyonecanfish"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "160212343251-helkhg7ugt37sadbpqjnk5icjdtifatq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.homebrewforlife.sharkydart.anyonecanfish",
+            "certificate_hash": "86fdea2867c7a2231b0763fc7d01ccd8213126ac"
+          }
+        },
+        {
+          "client_id": "160212343251-dj6ofvm6q04pomcqe3s2vukvgngko9hk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYBWv2ZwSzVT_FLsi8w3v2rkzFa5xG_4o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "160212343251-dj6ofvm6q04pomcqe3s2vukvgngko9hk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

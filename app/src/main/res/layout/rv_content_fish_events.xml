@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="2dp"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imgLurePic"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:contentDescription="@string/content_lure_image"
+                android:scaleType="centerCrop" />
+
+            <View
+                android:id="@drawable/scrim"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:background="@drawable/scrim" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvFishEventSpecies"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|start"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/adamina"
+                    android:textColor="@color/paper_300"
+                    android:textSize="24sp"
+                    tools:text="Fish Species" />
+
+                <TextView
+                    android:id="@+id/tvFishEventDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|start"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:ems="3"
+                    android:fontFamily="@font/adamina"
+                    android:textColor="@color/paper_300"
+                    android:textSize="14sp"
+                    tools:text="SIZE" />
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tvFishEventDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|end"
+                android:layout_marginStart="8dp"
+                android:ems="3"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/adamina"
+                android:textColor="@color/paper_300"
+                android:textSize="14sp"
+                tools:text="Date" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvFishEventDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:textAppearance="?attr/textAppearanceListItem"
+            tools:text="Event Description"/>
+    </LinearLayout>
+
+</android.support.design.card.MaterialCardView>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialKeyguardLayout="@layout/fishing_widget_provider_layout"
+    android:initialLayout="@layout/fishing_widget_provider_layout"
+    android:minHeight="110dp"
+    android:minWidth="170dp"
+    android:previewImage="@drawable/fish_circle_002"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="1800000"
+    android:widgetCategory="home_screen">
+
+</appwidget-provider>

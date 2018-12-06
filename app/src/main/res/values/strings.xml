@@ -1,0 +1,84 @@
+<resources>
+    <string name="app_name">Anyone Can Fish</string>
+    <string name="little_fish_icon">Little Fish Icon</string>
+    <string name="forecast_weather_icon">Weather Icon</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="main_btn_fishing_basics">Fishing Basics</string>
+    <string name="main_btn_game_fish">Game Fish of North America</string>
+    <string name="main_btn_mytrips">Fishing Trips</string>
+    <string name="main_btn_mytackle">Tackle Boxes</string>
+
+    <string name="mainmenu_map">Map</string>
+    <string name="mainmenu_signout">Sign Out</string>
+
+    <!-- complete sun and moon data for one day -->
+    <string name="solunar_api_baseurl">https://api.usno.navy.mil/rstt/oneday</string>
+    <string name="solunar_param_date">date</string>
+    <string name="solunar_param_coords">coords</string>
+    <string name="solunar_param_timezone">tz</string>
+    <string name="first_weather_api_baseurl">https://api.weather.gov/points/</string>
+
+    <!-- Firebase Firestore Database Collections-->
+    <string name="db_game_fish">game_fish</string>
+    <string name="db_basic_info">basic_info</string>
+    <string name="db_users">users</string>
+    <string name="db_tackle_boxes">TackleBoxes</string>
+    <string name="db_trips">Trips</string>
+    <string name="db_lures">Lures</string>
+    <string name="db_fish_events">FishEvents</string>
+    <string name="db_public_fish_events">PublicFishEvents</string>
+
+    <!--content description-->
+    <string name="content_outlook">Fishing Outlook</string>
+    <string name="content_fish_image">Image of a fish</string>
+    <string name="content_lure_image">Image of a type of lure</string>
+    <string name="content_log_event_icon">Icon of a leaping fish</string>
+    <string name="content_forecast_icon">Representation of Forecast</string>
+    <string name="content_tackle_box_image">Image of a tackle box</string>
+    <string name="content_basic_info_image">Fishing Equipment</string>
+    <string name="calculatron_info">An estimate of whether the fishing is good or bad or iffy</string>
+
+    <string name="title_activity_fishing_basics">The Basics of Fishing</string>
+    <string name="title_activity_game_fish">Game Fish of North America</string>
+    <string name="title_activity_fishing_trips">Fishing Trips</string>
+    <string name="title_activity_tackle_boxes">Tackle Boxes</string>
+    <string name="title_activity_lures">Lures</string>
+    <string name="title_activity_basic_equipment">Basic Equipment</string>
+    <string name="title_activity_how_to_fish_">Mentor Someone</string>
+    <string name="title_activity_maintenance_">Maintenance</string>
+    <string name="title_activity_maps">Anyone Can Fish Map</string>
+    <string name="title_activity_fish_events">Fish Events</string>
+
+    <string name="basics_whatyouneed">Basic Equipment</string>
+    <string name="basics_howtofish">Mentor Someone</string>
+    <string name="basics_rulesresources">U.S Fish and Wildlife Service</string>
+    <string name="usa_fish_and_wildlife_url">https://www.fws.gov/offices/index.html</string>
+    <string name="basics_maintenance">Maintenance</string>
+
+    <string name="lure_hint_name">Name</string>
+    <string name="lure_hint_size">Size</string>
+    <string name="lure_hint_desc">Description</string>
+    <string name="lure_hint_type">Type</string>
+
+    <string name="trip_hint_name">Name</string>
+    <string name="trip_hint_desc">Description</string>
+    <string name="trip_hint_startDate">Start</string>
+    <string name="trip_hint_endDate">End</string>
+    <string name="trip_hint_gps">Use GPS?</string>
+
+    <string name="fishevent_hint_species">Species</string>
+    <string name="fishevent_hint_released">Released?</string>
+    <string name="fishevent_hint_desc">Description</string>
+    <string name="fishevent_hint_date">Date</string>
+
+    <string name="large_text_HowToFish">
+        "The only wrong way to fish is keeping more than you need.\n\n"
+
+    </string>
+    <string name="large_text_Maintenance">
+        "Keeping your line in the water.\n\n"
+
+        "Just like with most things in this world, fishing gear will only last as long as it is cared for appropriately."
+    </string>
+</resources>

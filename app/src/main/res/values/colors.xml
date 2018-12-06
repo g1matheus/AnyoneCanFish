@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2c8500</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#8b6e52</color>
+
+    <color name="photo_placeholder">#b9679a</color>
+    <color name="paper_300">#ded0a5</color>
+    <color name="paper_500">#c1a07f</color>
+    <color name="paper_700">#8b6e52</color>
+    <color name="ink_a200">#564c80</color>
+    <color name="ink_a800">#2b205c</color>
+
+    <color name="sun_300">#dfbfa4</color>
+    <color name="sun_500">#dcac84</color>
+    <color name="sun_700">#d9955c</color>
+    <color name="moon_300">#99a6af</color>
+    <color name="moon_500">#849eaf</color>
+    <color name="moon_700">#5888a9</color>
+
+    <color name="scrim_start">#00000000</color>
+    <color name="scrim_center">#00000000</color>
+    <color name="scrim_end">#65000000</color>
+
+    <color name="white_ish">#7fffffff</color>
+    <color name="black_ish">#7f000000</color>
+</resources>

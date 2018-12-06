@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingLeft="@dimen/widget_header_padding"
+    android:paddingRight="@dimen/widget_header_padding"
+    android:paddingStart="@dimen/widget_header_padding"
+    android:paddingEnd="@dimen/widget_header_padding"
+    android:id="@+id/widgetItemContainer"
+    tools:layout_height="300dp"
+    tools:layout_width="300dp"
+    >
+    <ImageView
+        android:id="@+id/widgetForecastIcon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/content_forecast_icon"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/scrim"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/widgetOutlookImg"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="start|bottom"
+            android:contentDescription="@string/content_outlook"
+            />
+        <View
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="start|bottom"
+            android:background="@drawable/scrim"
+            />
+        <TextView
+            android:id="@+id/widgetOutlookText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:fontFamily="@font/adamina"
+            android:textColor="@color/paper_500"
+            android:text="Outlook"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/widgetDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:fontFamily="@font/adamina"
+            android:text="Tomorrow"
+            android:textColor="@color/paper_500"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/widgetWindDir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:fontFamily="@font/adamina"
+            android:text="WindDirection"
+            android:textColor="@color/paper_500"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/widgetTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:fontFamily="@font/adamina"
+            android:text="Temperature"
+            android:textColor="@color/paper_500"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/widgetWindSpeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:fontFamily="@font/adamina"
+            android:text="WindSpeed"
+            android:textColor="@color/paper_500"
+            android:textSize="18sp" />
+
+    </FrameLayout>
+
+</FrameLayout>
