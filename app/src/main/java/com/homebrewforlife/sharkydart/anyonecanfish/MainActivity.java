@@ -106,10 +106,13 @@ public class MainActivity extends AppCompatActivity{
 
     //Firebase Authentication
     FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
     FirebaseUser mCurUser;
 
     //Firestore Database Reference
     FirebaseFirestore mFS_Store;
+//    private DatabaseReference mMessagesDatabaseReference;
+//    private ChildEventListener  mChildEventListener;
     DocumentReference mFS_User_document_ref;
 
     //Solunar Data
@@ -134,7 +137,6 @@ public class MainActivity extends AppCompatActivity{
         try {
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
             FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                    .setTimestampsInSnapshotsEnabled(true)
                     .build();
             firestore.setFirestoreSettings(settings);
         }catch(IllegalStateException e){
@@ -153,6 +155,33 @@ public class MainActivity extends AppCompatActivity{
         // Enable Firestore logging
         FirebaseFirestore.setLoggingEnabled(true);
         mAuth = FirebaseAuth.getInstance();
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser theUser = firebaseAuth.getCurrentUser();
+                if(theUser != null){
+                    //user is signed in
+                    //Toast.makeText(MainActivity.this, "You're now signed in. Welcome to FriendlyChat!", Toast.LENGTH_LONG).show();
+                    onSignedInInitialize(theUser);
+                }
+                else{
+                    //User is signed out
+                    onSignedOutCleanup();
+
+                    List<AuthUI.IdpConfig> providers = Arrays.asList(
+                            new AuthUI.IdpConfig.EmailBuilder().build(),
+                            new AuthUI.IdpConfig.GoogleBuilder().build()
+                    );
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setIsSmartLockEnabled(false)
+                                    .setAvailableProviders(providers)
+                                    .build(),
+                            RC_SIGN_IN);
+                }
+            }
+        };
 
         //verify location permissions and start getting location and weather data
         verifyLocationPermissions(false);
@@ -251,19 +280,18 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onStart() {
         super.onStart();
-        mCurUser = mAuth.getCurrentUser();
-        if(mCurUser == null){
-            try {
-                //immediately try to sign the user in via FirebaseUI
-                FirebaseSignIn();
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        else{
-            Firestore_LoadData();
-        }
+    }
+    private void onSignedInInitialize(FirebaseUser theUser){
+        mCurUser = theUser;
+        //FirebaseSignIn();
+        Firestore_LoadData();
+//        attachDatabaseReadListener();
+    }
+    private void onSignedOutCleanup(){
+        //unset mCurUser
+        mCurUser = null;
+        //unset any other auth-dependent info
+//        detachDatabaseReadListener();
     }
 
     private void verifyLocationPermissions(boolean forceUpdate){
@@ -412,20 +440,6 @@ public class MainActivity extends AppCompatActivity{
                         Toast.makeText(mContext,"You have been signed out.", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-    private void FirebaseSignIn(){
-        // Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build());
-
-        // Create and launch sign-in intent
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN);
     }
 
     private void FirebaseGetUserInfo(FirebaseUser theCurUser){
@@ -637,11 +651,15 @@ public class MainActivity extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
 //        registerReceiver(mLocReceiver, mLocFilter);
+        mAuth.addAuthStateListener(mAuthStateListener);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        if(mAuthStateListener != null) {
+            mAuth.removeAuthStateListener(mAuthStateListener);
+        }
 /*
         try {
             unregisterReceiver(mForecastReceiver);
