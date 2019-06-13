@@ -313,9 +313,11 @@ public class MainActivity extends AppCompatActivity{
             }
             else {   //use shared prefs to refresh weather, unless forceUpdate, in which case - get GPS coords again
                 if(forceUpdate){     //button was clicked to refresh GPS
+                    Log.d("fart", "button was clicked to refresh");
                     startGettingLatLon();
                 }
                 else {    //button was not clicked to refresh
+                    Log.d("fart", "button not clicked to refresh, and have coords already");
                     String prefsForecastURL = getForecastURLFromSharedPrefs();
                     if(prefsForecastURL != null)
                         startGettingForecastData(prefsForecastURL);
@@ -333,10 +335,11 @@ public class MainActivity extends AppCompatActivity{
         editor.apply();
     }
     public static GeoPoint getCoordsFromSharedPrefs(Context theContext){
+        Log.d("fart", "sent context for prefs...");
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(theContext);
         String lat = mSharedPreferences.getString(SHAREDPREFS_LAT, null);
         String lon = mSharedPreferences.getString(SHAREDPREFS_LON, null);
-        Log.d("fart", "lat:" + lat + " lon:" + lon );
+        Log.d("fart", "[SHARED PREFS]: lat=" + lat + " lon=" + lon );
         GeoPoint coords;
         if(lat != null && lon != null)
             coords = new GeoPoint(Double.valueOf(lat), Double.valueOf(lon));
@@ -345,6 +348,7 @@ public class MainActivity extends AppCompatActivity{
         return coords;
     }
     private GeoPoint getCoordsFromSharedPrefs(){
+        Log.d("fart", "using _mContext_ for prefs...");
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         String lat = mSharedPreferences.getString(SHAREDPREFS_LAT, null);
         String lon = mSharedPreferences.getString(SHAREDPREFS_LON, null);
@@ -372,6 +376,8 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void startGettingLatLon(){
+        // TODO: figure out why mLocReceiver and MainLocationReceiver don't seem to be starting the process of loading Solunar data
+        Log.d("fart", "[startGettingLatLon] - registering mLocReceiver");
         mLocFilter = new IntentFilter();
         mLocFilter.addAction(LocationTasks.ACTION_FOUND_GPS_LOCATION);
         mLocReceiver = new MainLocationReceiver();
@@ -382,6 +388,7 @@ public class MainActivity extends AppCompatActivity{
         startService(getLatLonIntent);
     }
     private void startGettingFirstWeather(double lat, double lon){
+        Log.d("fart","[startGettingFirstWeather]");
         mWeatherFirstReceiverFilter = new IntentFilter();
         mWeatherFirstReceiverFilter.addAction(WeatherInfoTasks.ACTION_FOUND_WEATHER_FORECAST_API);
         mWeatherFirstReceiver = new MainWeatherFirstReceiver();
@@ -394,6 +401,7 @@ public class MainActivity extends AppCompatActivity{
         startService(getWeatherFirstIntent);
     }
     private void startGettingForecastData(String theForecastApiUrl){
+        Log.d("fart", "[startGettingForecastData]");
         mForecastReceiverFilter = new IntentFilter();
         mForecastReceiverFilter.addAction(GetForecastDataTasks.ACTION_FOUND_FORECAST_DATA);
         mForecastReceiver = new MainForecastReceiver();
@@ -571,7 +579,7 @@ public class MainActivity extends AppCompatActivity{
     private class MainLocationReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("fart", "[[Location]] Receiver Received Something...");
+            Log.d("fart", "[[Location]] MainLocationReceiver Received Something...");
             String action = intent.getAction();
             if(LocationTasks.ACTION_FOUND_GPS_LOCATION.equals(action)){
                 double theLat, theLon;
@@ -590,10 +598,11 @@ public class MainActivity extends AppCompatActivity{
                 //need current timezone offset, from milliseconds to hours, as integer
                 int theTimeZone = TimeZone.getDefault().getRawOffset() / 1000 / 60 / 60;
                 Log.d("fart", "timezoneoffset: " + theTimeZone);
+                Log.d("fart", "*** start trying to get Solunar data ***");
                 startGettingSolunarData(theDate, theLat, theLon, theTimeZone);
             }
             else{
-                Log.d("fart", "broadcast: " + action);
+                Log.d("fart", "-not found_gps action-: " + action);
             }
         }
     }
