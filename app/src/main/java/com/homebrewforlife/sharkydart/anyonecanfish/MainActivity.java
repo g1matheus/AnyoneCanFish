@@ -11,11 +11,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
@@ -25,7 +23,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -33,12 +30,9 @@ import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AdditionalUserInfo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -69,7 +63,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.concurrent.CountDownLatch;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -96,7 +89,7 @@ public class MainActivity extends AppCompatActivity{
 
     //Receivers and Intent Filters
     MainLocationReceiver mLocReceiver;
-    IntentFilter mLocFilter;
+    IntentFilter mLocReceiverFilter;
     MainWeatherFirstReceiver mWeatherFirstReceiver;
     IntentFilter mWeatherFirstReceiverFilter;
     MainForecastReceiver mForecastReceiver;
@@ -377,23 +370,23 @@ public class MainActivity extends AppCompatActivity{
 
     private void startGettingLatLon(){
         // TODO: figure out why mLocReceiver and MainLocationReceiver don't seem to be starting the process of loading Solunar data
-        Log.d("fart", "[startGettingLatLon] - registering mLocReceiver");
-        mLocFilter = new IntentFilter();
-        mLocFilter.addAction(LocationTasks.ACTION_FOUND_GPS_LOCATION);
-        mLocReceiver = new MainLocationReceiver();
-        mContext.registerReceiver(mLocReceiver, mLocFilter);
+//        mLocReceiverFilter = new IntentFilter();
+//        mLocReceiverFilter.addAction(LocationTasks.ACTION_FOUND_GPS_LOCATION);
+//        mLocReceiver = new MainLocationReceiver();
+//        mContext.registerReceiver(mLocReceiver, mLocReceiverFilter);
 
+        Log.d("fart", "[startService] - {getLatLonIntent}");
         Intent getLatLonIntent = new Intent(this, LocationService.class);
         getLatLonIntent.setAction(LocationTasks.ACTION_GET_GPS_LOCATION);
         startService(getLatLonIntent);
     }
     private void startGettingFirstWeather(double lat, double lon){
-        Log.d("fart","[startGettingFirstWeather]");
-        mWeatherFirstReceiverFilter = new IntentFilter();
-        mWeatherFirstReceiverFilter.addAction(WeatherInfoTasks.ACTION_FOUND_WEATHER_FORECAST_API);
-        mWeatherFirstReceiver = new MainWeatherFirstReceiver();
-        mContext.registerReceiver(mWeatherFirstReceiver, mWeatherFirstReceiverFilter);
+//        mWeatherFirstReceiverFilter = new IntentFilter();
+//        mWeatherFirstReceiverFilter.addAction(WeatherInfoTasks.ACTION_FOUND_WEATHER_FORECAST_API);
+//        mWeatherFirstReceiver = new MainWeatherFirstReceiver();
+//        mContext.registerReceiver(mWeatherFirstReceiver, mWeatherFirstReceiverFilter);
 
+        Log.d("fart", "[startService] - {getWeatherFirstIntent}");
         Intent getWeatherFirstIntent = new Intent(this, WeatherInfoService.class);
         getWeatherFirstIntent.putExtra(LocationTasks.EXTRA_LATITUDE, lat);
         getWeatherFirstIntent.putExtra(LocationTasks.EXTRA_LONGITUDE, lon);
@@ -401,23 +394,25 @@ public class MainActivity extends AppCompatActivity{
         startService(getWeatherFirstIntent);
     }
     private void startGettingForecastData(String theForecastApiUrl){
-        Log.d("fart", "[startGettingForecastData]");
-        mForecastReceiverFilter = new IntentFilter();
-        mForecastReceiverFilter.addAction(GetForecastDataTasks.ACTION_FOUND_FORECAST_DATA);
-        mForecastReceiver = new MainForecastReceiver();
-        mContext.registerReceiver(mForecastReceiver, mForecastReceiverFilter);
+        Log.d("fart", "forecast apiurl: " + theForecastApiUrl);
+//        mForecastReceiverFilter = new IntentFilter();
+//        mForecastReceiverFilter.addAction(GetForecastDataTasks.ACTION_FOUND_FORECAST_DATA);
+//        mForecastReceiver = new MainForecastReceiver();
+//        mContext.registerReceiver(mForecastReceiver, mForecastReceiverFilter);
 
+        Log.d("fart", "[startService] - {getForecastIntent}");
         Intent getForecastIntent = new Intent(this, GetForecastDataService.class);
         getForecastIntent.putExtra(GetForecastDataTasks.EXTRA_THE_FORECAST_API_URL, theForecastApiUrl);
         getForecastIntent.setAction(GetForecastDataTasks.ACTION_GET_FORECAST_DATA);
         startService(getForecastIntent);
     }
     private void startGettingSolunarData(String theDate, double theLat, double theLon, int theTimeZone){
-        mSolunarReceiverFilter = new IntentFilter();
-        mSolunarReceiverFilter.addAction(GetSolunarDataTasks.ACTION_FOUND_SOLUNAR_DATA);
-        mSolunarReceiver = new MainSolunarReceiver();
-        mContext.registerReceiver(mSolunarReceiver, mSolunarReceiverFilter);
+//        mSolunarReceiverFilter = new IntentFilter();
+//        mSolunarReceiverFilter.addAction(GetSolunarDataTasks.ACTION_FOUND_SOLUNAR_DATA);
+//        mSolunarReceiver = new MainSolunarReceiver();
+//        mContext.registerReceiver(mSolunarReceiver, mSolunarReceiverFilter);
 
+        Log.d("fart", "[startService] - {getSolunarIntent}");
         Intent getSolunarIntent = new Intent(this, GetSolunarDataService.class);
         getSolunarIntent.putExtra(GetSolunarDataTasks.EXTRA_SOLUNAR_DATE, theDate);
         getSolunarIntent.putExtra(GetSolunarDataTasks.EXTRA_SOLUNAR_LAT, theLat);
@@ -579,7 +574,7 @@ public class MainActivity extends AppCompatActivity{
     private class MainLocationReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("fart", "[[Location]] MainLocationReceiver Received Something...");
+            Log.d("fart", "MainLocationReceiver Received Something...");
             String action = intent.getAction();
             if(LocationTasks.ACTION_FOUND_GPS_LOCATION.equals(action)){
                 double theLat, theLon;
@@ -656,11 +651,52 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    private void letsRegisterOurReceivers(){
+        //startGettingLatLong:
+        mLocReceiverFilter = new IntentFilter();
+        mLocReceiverFilter.addAction(LocationTasks.ACTION_FOUND_GPS_LOCATION);
+        mLocReceiver = new MainLocationReceiver();
+        mContext.registerReceiver(mLocReceiver, mLocReceiverFilter);
+        Log.d("fart", "[registered receiver][mLocReceiver]");
+
+        //startGettingFirstWeather: 389
+        mWeatherFirstReceiverFilter = new IntentFilter();
+        mWeatherFirstReceiverFilter.addAction(WeatherInfoTasks.ACTION_FOUND_WEATHER_FORECAST_API);
+        mWeatherFirstReceiver = new MainWeatherFirstReceiver();
+        mContext.registerReceiver(mWeatherFirstReceiver, mWeatherFirstReceiverFilter);
+        Log.d("fart", "[registered receiver][mWeatherFirstReceiver]");
+
+        //startGettingForecastData
+        mForecastReceiverFilter = new IntentFilter();
+        mForecastReceiverFilter.addAction(GetForecastDataTasks.ACTION_FOUND_FORECAST_DATA);
+        mForecastReceiver = new MainForecastReceiver();
+        mContext.registerReceiver(mForecastReceiver, mForecastReceiverFilter);
+        Log.d("fart", "[registered receiver][mForecastReceiver]");
+
+        //startGettingSolunarData
+        mSolunarReceiverFilter = new IntentFilter();
+        mSolunarReceiverFilter.addAction(GetSolunarDataTasks.ACTION_FOUND_SOLUNAR_DATA);
+        mSolunarReceiver = new MainSolunarReceiver();
+        mContext.registerReceiver(mSolunarReceiver, mSolunarReceiverFilter);
+        Log.d("fart", "[registered receiver][mSolunarReceiver]");
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-//        registerReceiver(mLocReceiver, mLocFilter);
+        letsRegisterOurReceivers();
         mAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    private void letsUnregisterOurReceivers(){
+        try {
+            unregisterReceiver(mForecastReceiver);
+            unregisterReceiver(mLocReceiver);
+            unregisterReceiver(mWeatherFirstReceiver);
+            unregisterReceiver(mSolunarReceiver);
+        }catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -669,30 +705,22 @@ public class MainActivity extends AppCompatActivity{
         if(mAuthStateListener != null) {
             mAuth.removeAuthStateListener(mAuthStateListener);
         }
-/*
-        try {
-            unregisterReceiver(mForecastReceiver);
-            unregisterReceiver(mLocReceiver);
-            unregisterReceiver(mWeatherFirstReceiver);
-            unregisterReceiver(mSolunarReceiver);
-        }catch (IllegalArgumentException e){
-            e.printStackTrace();
-        }
-*/
+
+        letsUnregisterOurReceivers();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("fart", "onDestroy called");
-        try {
-            unregisterReceiver(mForecastReceiver);
-            unregisterReceiver(mLocReceiver);
-            unregisterReceiver(mWeatherFirstReceiver);
-            unregisterReceiver(mSolunarReceiver);
-        }catch (IllegalArgumentException e){
-            e.printStackTrace();
-        }
+//        Log.d("fart", "onDestroy called");
+//        try {
+//            unregisterReceiver(mForecastReceiver);
+//            unregisterReceiver(mLocReceiver);
+//            unregisterReceiver(mWeatherFirstReceiver);
+//            unregisterReceiver(mSolunarReceiver);
+//        }catch (IllegalArgumentException e){
+//            e.printStackTrace();
+//        }
     }
 
     /*
