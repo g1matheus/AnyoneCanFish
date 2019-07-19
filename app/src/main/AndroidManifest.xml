@@ -125,17 +125,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.homebrewforlife.sharkydart.anyonecanfish.MainActivity" />
         </activity>
-         <activity
-             android:name=".LuresActivity"
-             android:windowSoftInputMode="stateUnchanged"
-             android:launchMode="singleTop"
-             android:label="@string/title_activity_lures"
-             android:parentActivityName=".TackleBoxesActivity"
-             android:theme="@style/AppTheme.NoActionBar">
-             <meta-data
-                 android:name="android.support.PARENT_ACTIVITY"
-                 android:value="com.homebrewforlife.sharkydart.anyonecanfish.TackleBoxesActivity" />
-         </activity>
+        <activity
+            android:name=".LuresActivity"
+            android:windowSoftInputMode="stateUnchanged"
+            android:launchMode="singleTop"
+            android:label="@string/title_activity_lures"
+            android:parentActivityName=".TackleBoxesActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.homebrewforlife.sharkydart.anyonecanfish.TackleBoxesActivity" />
+        </activity>
 
         <receiver android:name=".widget.FishingWidgetProvider">
             <intent-filter>
