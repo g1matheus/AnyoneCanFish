@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
@@ -15,8 +16,8 @@ public class Fire_Trip implements Parcelable{
     private double longitude;
     private String name;
     private String desc;
-    private Timestamp dateStart;
-    private Timestamp dateEnd;
+    private Timestamp dateStart;    //using @ServerTimestamp annotation to a Date field indicates treatment as a server timestamp
+    private Timestamp dateEnd;      //using @ServerTimestamp annotation to a Date field indicates treatment as a server timestamp
     private GeoPoint geo_loc;
 
     public Fire_Trip(){}
@@ -80,6 +81,7 @@ public class Fire_Trip implements Parcelable{
         this.longitude = geo_loc.getLongitude();
     }
 
+    @Exclude
     public String getUid() {
         return uid;
     }
@@ -88,6 +90,7 @@ public class Fire_Trip implements Parcelable{
         this.uid = uid;
     }
 
+    @Exclude
     public double getLatitude() {
         return latitude;
     }
@@ -96,6 +99,7 @@ public class Fire_Trip implements Parcelable{
         this.latitude = latitude;
     }
 
+    @Exclude
     public double getLongitude() {
         return longitude;
     }
@@ -144,6 +148,7 @@ public class Fire_Trip implements Parcelable{
         this.geo_loc = geo_loc;
     }
 
+    @Exclude
     public String getQuickDescription(){
         return "uid: " + uid
                 + "\n=> " + name
