@@ -89,6 +89,40 @@ public class FishingTripsActivity extends AppCompatActivity {
                 Log.i("fart", "clicked FAB");
             }
         });
+
+//
+//        final DocumentReference docRef = db.collection("cities").document("SF");
+//        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable DocumentSnapshot snapshot,
+//                                @Nullable FirebaseFirestoreException e) {
+//                if (e != null) {
+//                    Log.w(TAG, "Listen failed.", e);
+//                    return;
+//                }
+//
+//                if (snapshot != null && snapshot.exists()) {
+//                    Log.d(TAG, "Current data: " + snapshot.getData());
+//                } else {
+//                    Log.d(TAG, "Current data: null");
+//                }
+//            }
+//        });
+
+        // RecyclerView for trips
+//        mRatingAdapter = new RatingAdapter(ratingsQuery) {
+//            @Override
+//            protected void onDataChanged() {
+//                if (getItemCount() == 0) {
+//                    mRatingsRecycler.setVisibility(View.GONE);
+//                    mEmptyView.setVisibility(View.VISIBLE);
+//                } else {
+//                    mRatingsRecycler.setVisibility(View.VISIBLE);
+//                    mEmptyView.setVisibility(View.GONE);
+//                }
+//            }
+//        };
+//
     }
 
     @Override

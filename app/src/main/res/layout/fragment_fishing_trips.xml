@@ -24,6 +24,7 @@
                 android:layout_height="wrap_content"
                 android:ems="9"
                 android:hint="@string/trip_hint_name"
+                android:importantForAutofill="no"
                 android:inputType="text" />
 
             <EditText
@@ -32,6 +33,7 @@
                 android:layout_height="wrap_content"
                 android:ems="12"
                 android:hint="@string/trip_hint_desc"
+                android:importantForAutofill="no"
                 android:inputType="text" />
         </LinearLayout>
 
