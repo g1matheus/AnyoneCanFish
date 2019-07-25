@@ -1,5 +1,7 @@
 package com.homebrewforlife.sharkydart.anyonecanfish.models;
 
+import com.google.firebase.firestore.Exclude;
+
 public class Fire_DataType {
     private String uid;
 
@@ -11,6 +13,7 @@ public class Fire_DataType {
         this.uid = uid;
     }
 
+    @Exclude
     public String getUid() {
         return uid;
     }
@@ -19,6 +22,7 @@ public class Fire_DataType {
         this.uid = uid;
     }
 
+    @Exclude
     public String getQuickDescription(){
         return "Base Type - uid: " + this.uid;
     }

@@ -40,12 +40,13 @@ import javax.net.ssl.TrustManagerFactory;
 
 public class GetSolunarDataTasks {
     public static final String ACTION_GET_SOLUNAR_DATA = "get-solunar-api-data";
+    public static final String ACTION_FOUND_SOLUNAR_DATA = "found-solunar-api-data";
+
     public static final String EXTRA_SOLUNAR_DATE = "extra-solunar-date";
     public static final String EXTRA_SOLUNAR_LAT = "extra-solunar-lat";
     public static final String EXTRA_SOLUNAR_LON = "extra-solunar-lon";
     public static final String EXTRA_SOLUNAR_TZ = "extra-solunar-tz";
 
-    public static final String ACTION_FOUND_SOLUNAR_DATA = "found-solunar-api-data";
     public static final String EXTRA_THE_SOLUNAR_DATA = "extra-the-solunar-data";
 
 

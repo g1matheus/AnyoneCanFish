@@ -3,6 +3,8 @@ package com.homebrewforlife.sharkydart.anyonecanfish.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.Exclude;
+
 
 public class Fire_Lure implements Parcelable{
     private String uid;
@@ -70,6 +72,8 @@ public class Fire_Lure implements Parcelable{
             return new Fire_Lure[size];
         }
     };
+
+    @Exclude
     public String getUid() {
         return uid;
     }
@@ -134,6 +138,7 @@ public class Fire_Lure implements Parcelable{
         this.hook_count = hook_count;
     }
 
+    @Exclude
     public String getQuickDescription(){
         return "UID: " + uid
                 + "\nName => " + name

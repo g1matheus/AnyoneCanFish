@@ -11,11 +11,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
@@ -25,7 +23,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -33,12 +30,9 @@ import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AdditionalUserInfo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -69,7 +63,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.concurrent.CountDownLatch;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -96,7 +89,7 @@ public class MainActivity extends AppCompatActivity{
 
     //Receivers and Intent Filters
     MainLocationReceiver mLocReceiver;
-    IntentFilter mLocFilter;
+    IntentFilter mLocReceiverFilter;
     MainWeatherFirstReceiver mWeatherFirstReceiver;
     IntentFilter mWeatherFirstReceiverFilter;
     MainForecastReceiver mForecastReceiver;
@@ -106,10 +99,13 @@ public class MainActivity extends AppCompatActivity{
 
     //Firebase Authentication
     FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
     FirebaseUser mCurUser;
 
     //Firestore Database Reference
     FirebaseFirestore mFS_Store;
+//    private DatabaseReference mMessagesDatabaseReference;
+//    private ChildEventListener  mChildEventListener;
     DocumentReference mFS_User_document_ref;
 
     //Solunar Data
@@ -134,7 +130,6 @@ public class MainActivity extends AppCompatActivity{
         try {
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
             FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                    .setTimestampsInSnapshotsEnabled(true)
                     .build();
             firestore.setFirestoreSettings(settings);
         }catch(IllegalStateException e){
@@ -153,6 +148,33 @@ public class MainActivity extends AppCompatActivity{
         // Enable Firestore logging
         FirebaseFirestore.setLoggingEnabled(true);
         mAuth = FirebaseAuth.getInstance();
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser theUser = firebaseAuth.getCurrentUser();
+                if(theUser != null){
+                    //user is signed in
+                    //Toast.makeText(MainActivity.this, "You're now signed in. Welcome to FriendlyChat!", Toast.LENGTH_LONG).show();
+                    onSignedInInitialize(theUser);
+                }
+                else{
+                    //User is signed out
+                    onSignedOutCleanup();
+
+                    List<AuthUI.IdpConfig> providers = Arrays.asList(
+                            new AuthUI.IdpConfig.EmailBuilder().build(),
+                            new AuthUI.IdpConfig.GoogleBuilder().build()
+                    );
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setIsSmartLockEnabled(false)
+                                    .setAvailableProviders(providers)
+                                    .build(),
+                            RC_SIGN_IN);
+                }
+            }
+        };
 
         //verify location permissions and start getting location and weather data
         verifyLocationPermissions(false);
@@ -251,19 +273,18 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onStart() {
         super.onStart();
-        mCurUser = mAuth.getCurrentUser();
-        if(mCurUser == null){
-            try {
-                //immediately try to sign the user in via FirebaseUI
-                FirebaseSignIn();
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        else{
-            Firestore_LoadData();
-        }
+    }
+    private void onSignedInInitialize(FirebaseUser theUser){
+        mCurUser = theUser;
+        //FirebaseSignIn();
+        Firestore_LoadData();
+//        attachDatabaseReadListener();
+    }
+    private void onSignedOutCleanup(){
+        //unset mCurUser
+        mCurUser = null;
+        //unset any other auth-dependent info
+//        detachDatabaseReadListener();
     }
 
     private void verifyLocationPermissions(boolean forceUpdate){
@@ -285,9 +306,11 @@ public class MainActivity extends AppCompatActivity{
             }
             else {   //use shared prefs to refresh weather, unless forceUpdate, in which case - get GPS coords again
                 if(forceUpdate){     //button was clicked to refresh GPS
+                    Log.d("fart", "button was clicked to refresh");
                     startGettingLatLon();
                 }
                 else {    //button was not clicked to refresh
+                    Log.d("fart", "button not clicked to refresh, and have coords already");
                     String prefsForecastURL = getForecastURLFromSharedPrefs();
                     if(prefsForecastURL != null)
                         startGettingForecastData(prefsForecastURL);
@@ -305,10 +328,11 @@ public class MainActivity extends AppCompatActivity{
         editor.apply();
     }
     public static GeoPoint getCoordsFromSharedPrefs(Context theContext){
+        Log.d("fart", "sent context for prefs...");
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(theContext);
         String lat = mSharedPreferences.getString(SHAREDPREFS_LAT, null);
         String lon = mSharedPreferences.getString(SHAREDPREFS_LON, null);
-        Log.d("fart", "lat:" + lat + " lon:" + lon );
+        Log.d("fart", "[SHARED PREFS]: lat=" + lat + " lon=" + lon );
         GeoPoint coords;
         if(lat != null && lon != null)
             coords = new GeoPoint(Double.valueOf(lat), Double.valueOf(lon));
@@ -317,6 +341,7 @@ public class MainActivity extends AppCompatActivity{
         return coords;
     }
     private GeoPoint getCoordsFromSharedPrefs(){
+        Log.d("fart", "using _mContext_ for prefs...");
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         String lat = mSharedPreferences.getString(SHAREDPREFS_LAT, null);
         String lon = mSharedPreferences.getString(SHAREDPREFS_LON, null);
@@ -344,21 +369,24 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void startGettingLatLon(){
-        mLocFilter = new IntentFilter();
-        mLocFilter.addAction(LocationTasks.ACTION_FOUND_GPS_LOCATION);
-        mLocReceiver = new MainLocationReceiver();
-        mContext.registerReceiver(mLocReceiver, mLocFilter);
+        // TODO: figure out why mLocReceiver and MainLocationReceiver don't seem to be starting the process of loading Solunar data
+//        mLocReceiverFilter = new IntentFilter();
+//        mLocReceiverFilter.addAction(LocationTasks.ACTION_FOUND_GPS_LOCATION);
+//        mLocReceiver = new MainLocationReceiver();
+//        mContext.registerReceiver(mLocReceiver, mLocReceiverFilter);
 
+        Log.d("fart", "[startService] - {getLatLonIntent}");
         Intent getLatLonIntent = new Intent(this, LocationService.class);
         getLatLonIntent.setAction(LocationTasks.ACTION_GET_GPS_LOCATION);
         startService(getLatLonIntent);
     }
     private void startGettingFirstWeather(double lat, double lon){
-        mWeatherFirstReceiverFilter = new IntentFilter();
-        mWeatherFirstReceiverFilter.addAction(WeatherInfoTasks.ACTION_FOUND_WEATHER_FORECAST_API);
-        mWeatherFirstReceiver = new MainWeatherFirstReceiver();
-        mContext.registerReceiver(mWeatherFirstReceiver, mWeatherFirstReceiverFilter);
+//        mWeatherFirstReceiverFilter = new IntentFilter();
+//        mWeatherFirstReceiverFilter.addAction(WeatherInfoTasks.ACTION_FOUND_WEATHER_FORECAST_API);
+//        mWeatherFirstReceiver = new MainWeatherFirstReceiver();
+//        mContext.registerReceiver(mWeatherFirstReceiver, mWeatherFirstReceiverFilter);
 
+        Log.d("fart", "[startService] - {getWeatherFirstIntent}");
         Intent getWeatherFirstIntent = new Intent(this, WeatherInfoService.class);
         getWeatherFirstIntent.putExtra(LocationTasks.EXTRA_LATITUDE, lat);
         getWeatherFirstIntent.putExtra(LocationTasks.EXTRA_LONGITUDE, lon);
@@ -366,22 +394,25 @@ public class MainActivity extends AppCompatActivity{
         startService(getWeatherFirstIntent);
     }
     private void startGettingForecastData(String theForecastApiUrl){
-        mForecastReceiverFilter = new IntentFilter();
-        mForecastReceiverFilter.addAction(GetForecastDataTasks.ACTION_FOUND_FORECAST_DATA);
-        mForecastReceiver = new MainForecastReceiver();
-        mContext.registerReceiver(mForecastReceiver, mForecastReceiverFilter);
+        Log.d("fart", "forecast apiurl: " + theForecastApiUrl);
+//        mForecastReceiverFilter = new IntentFilter();
+//        mForecastReceiverFilter.addAction(GetForecastDataTasks.ACTION_FOUND_FORECAST_DATA);
+//        mForecastReceiver = new MainForecastReceiver();
+//        mContext.registerReceiver(mForecastReceiver, mForecastReceiverFilter);
 
+        Log.d("fart", "[startService] - {getForecastIntent}");
         Intent getForecastIntent = new Intent(this, GetForecastDataService.class);
         getForecastIntent.putExtra(GetForecastDataTasks.EXTRA_THE_FORECAST_API_URL, theForecastApiUrl);
         getForecastIntent.setAction(GetForecastDataTasks.ACTION_GET_FORECAST_DATA);
         startService(getForecastIntent);
     }
     private void startGettingSolunarData(String theDate, double theLat, double theLon, int theTimeZone){
-        mSolunarReceiverFilter = new IntentFilter();
-        mSolunarReceiverFilter.addAction(GetSolunarDataTasks.ACTION_FOUND_SOLUNAR_DATA);
-        mSolunarReceiver = new MainSolunarReceiver();
-        mContext.registerReceiver(mSolunarReceiver, mSolunarReceiverFilter);
+//        mSolunarReceiverFilter = new IntentFilter();
+//        mSolunarReceiverFilter.addAction(GetSolunarDataTasks.ACTION_FOUND_SOLUNAR_DATA);
+//        mSolunarReceiver = new MainSolunarReceiver();
+//        mContext.registerReceiver(mSolunarReceiver, mSolunarReceiverFilter);
 
+        Log.d("fart", "[startService] - {getSolunarIntent}");
         Intent getSolunarIntent = new Intent(this, GetSolunarDataService.class);
         getSolunarIntent.putExtra(GetSolunarDataTasks.EXTRA_SOLUNAR_DATE, theDate);
         getSolunarIntent.putExtra(GetSolunarDataTasks.EXTRA_SOLUNAR_LAT, theLat);
@@ -412,20 +443,6 @@ public class MainActivity extends AppCompatActivity{
                         Toast.makeText(mContext,"You have been signed out.", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-    private void FirebaseSignIn(){
-        // Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build());
-
-        // Create and launch sign-in intent
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN);
     }
 
     private void FirebaseGetUserInfo(FirebaseUser theCurUser){
@@ -557,7 +574,7 @@ public class MainActivity extends AppCompatActivity{
     private class MainLocationReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("fart", "[[Location]] Receiver Received Something...");
+            Log.d("fart", "MainLocationReceiver Received Something...");
             String action = intent.getAction();
             if(LocationTasks.ACTION_FOUND_GPS_LOCATION.equals(action)){
                 double theLat, theLon;
@@ -576,10 +593,11 @@ public class MainActivity extends AppCompatActivity{
                 //need current timezone offset, from milliseconds to hours, as integer
                 int theTimeZone = TimeZone.getDefault().getRawOffset() / 1000 / 60 / 60;
                 Log.d("fart", "timezoneoffset: " + theTimeZone);
+                Log.d("fart", "*** start trying to get Solunar data ***");
                 startGettingSolunarData(theDate, theLat, theLon, theTimeZone);
             }
             else{
-                Log.d("fart", "broadcast: " + action);
+                Log.d("fart", "-not found_gps action-: " + action);
             }
         }
     }
@@ -633,39 +651,76 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    private void letsRegisterOurReceivers(){
+        //startGettingLatLong:
+        mLocReceiverFilter = new IntentFilter();
+        mLocReceiverFilter.addAction(LocationTasks.ACTION_FOUND_GPS_LOCATION);
+        mLocReceiver = new MainLocationReceiver();
+        mContext.registerReceiver(mLocReceiver, mLocReceiverFilter);
+        Log.d("fart", "[registered receiver][mLocReceiver]");
+
+        //startGettingFirstWeather: 389
+        mWeatherFirstReceiverFilter = new IntentFilter();
+        mWeatherFirstReceiverFilter.addAction(WeatherInfoTasks.ACTION_FOUND_WEATHER_FORECAST_API);
+        mWeatherFirstReceiver = new MainWeatherFirstReceiver();
+        mContext.registerReceiver(mWeatherFirstReceiver, mWeatherFirstReceiverFilter);
+        Log.d("fart", "[registered receiver][mWeatherFirstReceiver]");
+
+        //startGettingForecastData
+        mForecastReceiverFilter = new IntentFilter();
+        mForecastReceiverFilter.addAction(GetForecastDataTasks.ACTION_FOUND_FORECAST_DATA);
+        mForecastReceiver = new MainForecastReceiver();
+        mContext.registerReceiver(mForecastReceiver, mForecastReceiverFilter);
+        Log.d("fart", "[registered receiver][mForecastReceiver]");
+
+        //startGettingSolunarData
+        mSolunarReceiverFilter = new IntentFilter();
+        mSolunarReceiverFilter.addAction(GetSolunarDataTasks.ACTION_FOUND_SOLUNAR_DATA);
+        mSolunarReceiver = new MainSolunarReceiver();
+        mContext.registerReceiver(mSolunarReceiver, mSolunarReceiverFilter);
+        Log.d("fart", "[registered receiver][mSolunarReceiver]");
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-//        registerReceiver(mLocReceiver, mLocFilter);
+        letsRegisterOurReceivers();
+        mAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    private void letsUnregisterOurReceivers(){
+        try {
+            unregisterReceiver(mForecastReceiver);
+            unregisterReceiver(mLocReceiver);
+            unregisterReceiver(mWeatherFirstReceiver);
+            unregisterReceiver(mSolunarReceiver);
+        }catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-/*
-        try {
-            unregisterReceiver(mForecastReceiver);
-            unregisterReceiver(mLocReceiver);
-            unregisterReceiver(mWeatherFirstReceiver);
-            unregisterReceiver(mSolunarReceiver);
-        }catch (IllegalArgumentException e){
-            e.printStackTrace();
+        if(mAuthStateListener != null) {
+            mAuth.removeAuthStateListener(mAuthStateListener);
         }
-*/
+
+        letsUnregisterOurReceivers();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("fart", "onDestroy called");
-        try {
-            unregisterReceiver(mForecastReceiver);
-            unregisterReceiver(mLocReceiver);
-            unregisterReceiver(mWeatherFirstReceiver);
-            unregisterReceiver(mSolunarReceiver);
-        }catch (IllegalArgumentException e){
-            e.printStackTrace();
-        }
+//        Log.d("fart", "onDestroy called");
+//        try {
+//            unregisterReceiver(mForecastReceiver);
+//            unregisterReceiver(mLocReceiver);
+//            unregisterReceiver(mWeatherFirstReceiver);
+//            unregisterReceiver(mSolunarReceiver);
+//        }catch (IllegalArgumentException e){
+//            e.printStackTrace();
+//        }
     }
 
     /*
@@ -682,4 +737,22 @@ public class MainActivity extends AppCompatActivity{
         }
     });
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

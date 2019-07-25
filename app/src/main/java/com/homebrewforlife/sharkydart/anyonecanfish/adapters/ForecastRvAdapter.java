@@ -59,9 +59,12 @@ public class ForecastRvAdapter extends RecyclerView.Adapter<ForecastRvAdapter.Vi
         holder.mTvPeriodName.setText(thePeriod.getName());
         Picasso.get().load(thePeriod.getIconURL()).into(holder.mImgWeatherIcon);
 
+        //todo: mSolunarData does not need to exist in order to use OptimusCalculatron
         //Beg Optimus Calculatron for its astute, otherworldly wisdom
-        if(mSolunarData != null)
+        //if(mSolunarData != null)
             Picasso.get().load(pleaseSendYourVisualGuidanceSoThatIMayGrokTheFullness(mContext, thePeriod, mSolunarData)).into(holder.mImgDecreeOfCalculatron);
+        //else
+        //    Log.d("fart","--trying to display it, but solunar data is null--");
 
         holder.itemView.setTag(thePeriod);
         holder.itemView.setOnClickListener(mOnClickListener);

@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.GeoPoint;
 
 public class Fire_FishEvent implements Parcelable {
@@ -72,6 +73,7 @@ public class Fire_FishEvent implements Parcelable {
         }
     };
 
+    @Exclude
     public String getUid() {
         return uid;
     }
@@ -104,6 +106,7 @@ public class Fire_FishEvent implements Parcelable {
         this.desc = desc;
     }
 
+    @Exclude
     public double getLatitude() {
         return latitude;
     }
@@ -112,6 +115,7 @@ public class Fire_FishEvent implements Parcelable {
         this.latitude = latitude;
     }
 
+    @Exclude
     public double getLongitude() {
         return longitude;
     }
@@ -144,6 +148,7 @@ public class Fire_FishEvent implements Parcelable {
         this.species = species;
     }
 
+    @Exclude
     public String getQuickDescription(){
         return  "FishEvent: " + uid
                 + "\ndate =>" + date

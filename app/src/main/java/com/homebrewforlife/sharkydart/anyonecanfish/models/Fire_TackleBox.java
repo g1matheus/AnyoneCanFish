@@ -3,6 +3,8 @@ package com.homebrewforlife.sharkydart.anyonecanfish.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.util.ArrayList;
 
 public class Fire_TackleBox implements Parcelable{
@@ -83,6 +85,7 @@ public class Fire_TackleBox implements Parcelable{
         this.name = name;
     }
 
+    @Exclude
     public String getUid() {
         return uid;
     }

@@ -11,7 +11,7 @@ import com.homebrewforlife.sharkydart.anyonecanfish.models.ForecastPeriod;
 import com.homebrewforlife.sharkydart.anyonecanfish.models.SolunarData;
 
 public class OptimusCalculatron {
-    public static double howWillTheFishingBe(ForecastPeriod thePeriod, SolunarData earthlyBodies){
+    static Double howWillTheFishingBe(ForecastPeriod thePeriod, SolunarData earthlyBodies){
         double start = 50.0; //50%
         //is it cold?
         start = start + (thePeriod.getTemperature() - 60);
@@ -52,7 +52,7 @@ public class OptimusCalculatron {
         }
         return start;
     }
-    public static double howWillTheFishingBe(ForecastPeriod thePeriod, SolunarData earthlyBodies, Fire_GameFish fishType){
+    static Double howWillTheFishingBe(ForecastPeriod thePeriod, SolunarData earthlyBodies, Fire_GameFish fishType){
         double start = howWillTheFishingBe(thePeriod, earthlyBodies);
         //some fish are more or less active at night
         if(thePeriod.getIsDayTime()){
@@ -95,7 +95,7 @@ public class OptimusCalculatron {
     }
 
     public static int pleaseSendYourVisualGuidanceSoThatIMayGrokTheFullness(Context theContext, ForecastPeriod theForecastSnapshot, SolunarData theSolunarObj){
-        Double crystalBallTarget = 30.0;
+        Double crystalBallTarget = 45.0;
         Double threshold = 3.0;
         Double cutoff = 10.0;
         Double soothsaying = OptimusCalculatron.howWillTheFishingBe(theForecastSnapshot, theSolunarObj);
