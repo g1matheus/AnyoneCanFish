@@ -15,22 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "160212343251-j1bmvacji8jee51fkn0tfadicfqupi98.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.homebrewforlife.sharkydart.anyonecanfish",
-            "certificate_hash": "d20d02fbaf7e85e9b80623f3ac0f01f6d280ce0e"
-          }
-        },
-        {
-          "client_id": "160212343251-c26joj5cj6n8utgklphsr9n3p2mr99mk.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.homebrewforlife.sharkydart.anyonecanfish",
-            "certificate_hash": "f164e217f7cb7633a1b03ef69acfb92ec6f2947a"
-          }
-        },
-        {
           "client_id": "160212343251-helkhg7ugt37sadbpqjnk5icjdtifatq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -49,13 +33,20 @@
         }
       ],
       "services": {
+        "analytics_service": {
+          "status": 1
+        },
         "appinvite_service": {
+          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "160212343251-dj6ofvm6q04pomcqe3s2vukvgngko9hk.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
+        },
+        "ads_service": {
+          "status": 2
         }
       }
     }
