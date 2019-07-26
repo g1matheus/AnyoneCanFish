@@ -41,6 +41,10 @@ public class LuresActivity extends AppCompatActivity implements DataGrabListener
     Fire_TackleBox mInTacklebox;
     FirestoreGrabber fs;
 
+//    private FirebaseDatabase mFirebaseDatabase;
+//    private DatabaseReference mMessagesDatabaseReference;
+//    private ChildEventListener  mChildEventListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +57,12 @@ public class LuresActivity extends AppCompatActivity implements DataGrabListener
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+//        //get pointer to Firebase itself
+//        mFirebaseDatabase = FirebaseDatabase.getInstance();
+//        //use database reference to get reference to the 'messages' db in Firebase
+//        mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("messages");
+
 
         if(savedInstanceState == null)
             mLuresArrayList = new ArrayList<>();
@@ -67,7 +77,7 @@ public class LuresActivity extends AppCompatActivity implements DataGrabListener
         }else {
             mInTacklebox = intent.getParcelableExtra(TackleBoxesActivity.THE_TACKLEBOX);
             Log.d("fart", mInTacklebox.getUid() + "  " + mInTacklebox.getName());
-            loadLuresFromFirebase();
+            //loadLuresFromFirebase();
         }
 
         mLuresRV = findViewById(R.id.rvLures);
@@ -160,4 +170,56 @@ public class LuresActivity extends AppCompatActivity implements DataGrabListener
         mLuresRVAdapter.notifyDataSetChanged();
         setupRecyclerView(mLuresRV);
     }
+
+    private void attachDatabaseReadListener(){
+//        if(mChildEventListener == null) {
+//            mChildEventListener = new ChildEventListener() {
+//                @Override
+//                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                    //gets called initially, for each, and also when one is added
+//                    FriendlyMessage friendlyMessage = dataSnapshot.getValue(FriendlyMessage.class);
+//                    mMessageAdapter.add(friendlyMessage);
+//                }
+//
+//                @Override
+//                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                }
+//
+//                @Override
+//                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+//                }
+//
+//                @Override
+//                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//                }
+//            };
+//            mMessagesDatabaseReference.addChildEventListener(mChildEventListener);
+//        }
+    }
+    private void detachDatabaseReadListener(){
+//        if(mChildEventListener != null) {
+//            mMessagesDatabaseReference.removeEventListener(mChildEventListener);
+//            mChildEventListener = null;
+//        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //attach Listener
+//        attachDatabaseReadListener();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //detach Listener
+//        detachDatabaseReadListener();
+//        mTackleBoxAdapter.clear();
+    }
+
 }

@@ -136,4 +136,55 @@ public class FishingTripsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void attachDatabaseReadListener(){
+//        if(mChildEventListener == null) {
+//            mChildEventListener = new ChildEventListener() {
+//                @Override
+//                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                    //gets called initially, for each, and also when one is added
+//                    FriendlyMessage friendlyMessage = dataSnapshot.getValue(FriendlyMessage.class);
+//                    mMessageAdapter.add(friendlyMessage);
+//                }
+//
+//                @Override
+//                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                }
+//
+//                @Override
+//                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+//                }
+//
+//                @Override
+//                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//                }
+//            };
+//            mMessagesDatabaseReference.addChildEventListener(mChildEventListener);
+//        }
+    }
+    private void detachDatabaseReadListener(){
+//        if(mChildEventListener != null) {
+//            mMessagesDatabaseReference.removeEventListener(mChildEventListener);
+//            mChildEventListener = null;
+//        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //attach Listener
+//        attachDatabaseReadListener();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //detach Listener
+//        detachDatabaseReadListener();
+//        mTackleBoxAdapter.clear();
+    }
+
 }
