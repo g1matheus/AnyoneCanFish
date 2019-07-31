@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.Timestamp;
@@ -81,6 +82,8 @@ public class FishingTripsActivity extends AppCompatActivity {
                                                     Timestamp.now())
                                     );
                                     Toast.makeText(mContext, "Making a trip...", Toast.LENGTH_SHORT).show();
+                                    ((EditText)findViewById(R.id.etName)).setText("");
+                                    ((EditText)findViewById(R.id.etDescription)).setText("");
                                 }
                                 else
                                     Toast.makeText(mContext, "mCurUser is null", Toast.LENGTH_LONG).show();
@@ -90,39 +93,9 @@ public class FishingTripsActivity extends AppCompatActivity {
             }
         });
 
-//
-//        final DocumentReference docRef = db.collection("cities").document("SF");
-//        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable DocumentSnapshot snapshot,
-//                                @Nullable FirebaseFirestoreException e) {
-//                if (e != null) {
-//                    Log.w(TAG, "Listen failed.", e);
-//                    return;
-//                }
-//
-//                if (snapshot != null && snapshot.exists()) {
-//                    Log.d(TAG, "Current data: " + snapshot.getData());
-//                } else {
-//                    Log.d(TAG, "Current data: null");
-//                }
-//            }
-//        });
+        //todo: Recycler View needs to be tied to a listener getting snapshots of changing documents
+        //      - documents in Trips collection should be added to and removed from recycler view via a listener
 
-        // RecyclerView for trips
-//        mRatingAdapter = new RatingAdapter(ratingsQuery) {
-//            @Override
-//            protected void onDataChanged() {
-//                if (getItemCount() == 0) {
-//                    mRatingsRecycler.setVisibility(View.GONE);
-//                    mEmptyView.setVisibility(View.VISIBLE);
-//                } else {
-//                    mRatingsRecycler.setVisibility(View.VISIBLE);
-//                    mEmptyView.setVisibility(View.GONE);
-//                }
-//            }
-//        };
-//
     }
 
     @Override
