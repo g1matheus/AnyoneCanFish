@@ -1,14 +1,18 @@
 package com.homebrewforlife.sharkydart.anyonecanfish;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -22,12 +26,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.homebrewforlife.sharkydart.anyonecanfish.adapters.TripsRVAdapter;
 import com.homebrewforlife.sharkydart.anyonecanfish.fireX.FirestoreAdds;
 import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_Lure;
 import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_Trip;
 import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_User;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -41,6 +47,9 @@ public class FishingTripsActivity extends AppCompatActivity {
     public static final String THE_TRIP = "homebrew-sharkydart-fishing-trip";
 
     private Context mContext;
+    ArrayList<Fire_Trip> mTripsArrayList;
+    TripsRVAdapter mTripsRVAdapter;
+    RecyclerView mTripsRV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +63,19 @@ public class FishingTripsActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         mContext = this;
+
+        if(savedInstanceState == null){
+            mTripsArrayList = new ArrayList<>();
+        }else if(savedInstanceState.containsKey(MainActivity.FISHING_TRIPS_ARRAYLIST)){
+            mTripsArrayList = savedInstanceState.getParcelableArrayList(MainActivity.FISHING_TRIPS_ARRAYLIST);
+        }
+
+        Intent intent = getIntent();
+        if (intent == null) {
+            closeOnError();
+        }else {
+            mTripsArrayList = intent.getParcelableArrayListExtra(MainActivity.FISHING_TRIPS_ARRAYLIST);
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fishingtrips_fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +117,26 @@ public class FishingTripsActivity extends AppCompatActivity {
 
         //todo: Recycler View needs to be tied to a listener getting snapshots of changing documents
         //      - documents in Trips collection should be added to and removed from recycler view via a listener
+        mTripsRV = findViewById(R.id.rvTrips);
+        assert mTripsRV != null;
+        setupRecyclerView(mTripsRV);
+    }
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+        mTripsRVAdapter = new TripsRVAdapter(this, mTripsArrayList);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(mTripsRVAdapter);
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(MainActivity.FISHING_TRIPS_ARRAYLIST, mTripsArrayList);
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mTripsArrayList = savedInstanceState.getParcelableArrayList(MainActivity.FISHING_TRIPS_ARRAYLIST);
     }
 
     @Override
@@ -109,7 +150,8 @@ public class FishingTripsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void attachDatabaseReadListener(){
+    private void attachFirestoreTripReadListener(){
+        //construct a new listener if it doesn't exist
 //        if(mChildEventListener == null) {
 //            mChildEventListener = new ChildEventListener() {
 //                @Override
@@ -135,7 +177,7 @@ public class FishingTripsActivity extends AppCompatActivity {
 //                public void onCancelled(@NonNull DatabaseError databaseError) {
 //                }
 //            };
-//            mMessagesDatabaseReference.addChildEventListener(mChildEventListener);
+//            mMessagesDatabaseReference.addChildEventListener(mChildEventListener);    //add that listener
 //        }
     }
     private void detachDatabaseReadListener(){
@@ -158,6 +200,11 @@ public class FishingTripsActivity extends AppCompatActivity {
         //detach Listener
 //        detachDatabaseReadListener();
 //        mTackleBoxAdapter.clear();
+    }
+
+    private void closeOnError() {
+        finish();
+        Toast.makeText(this, "Can't find Trips", Toast.LENGTH_SHORT).show();
     }
 
 }
