@@ -32,8 +32,8 @@ public class LuresRVAdapter extends RecyclerView.Adapter<LuresRVAdapter.ViewHold
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            final Fire_Lure theBox = (Fire_Lure) view.getTag();
-            Log.d("fart", "clicked Lure for deletion: " + theBox.getUid());
+            final Fire_Lure theLure = (Fire_Lure) view.getTag();
+            Log.d("fart", "clicked Lure for deletion: " + theLure.getUid());
             Snackbar.make(view, "Delete lure!", Snackbar.LENGTH_LONG)
                     .setAction("Delete lure", new View.OnClickListener() {
                         @Override
@@ -41,7 +41,7 @@ public class LuresRVAdapter extends RecyclerView.Adapter<LuresRVAdapter.ViewHold
                             FirebaseFirestore mFS_Store = FirebaseFirestore.getInstance();
                             FirebaseUser mCurUser = FirebaseAuth.getInstance().getCurrentUser();
                             if(mCurUser != null){
-                                FirestoreDeletes.deleteFS_lure(view.getContext(), new Fire_User(mCurUser), mTackleBox, theBox, mFS_Store);
+                                FirestoreDeletes.deleteFS_lure(view.getContext(), new Fire_User(mCurUser), mTackleBox, theLure, mFS_Store);
                                 Toast.makeText(view.getContext(), "Deleting a Lure...", Toast.LENGTH_SHORT).show();
                             }
                             else
