@@ -65,6 +65,12 @@ public class FirestoreAdds {
                 fire_tackleBox.setUid(theNewBox.getId());
             }
 
+            if (theNewBox.get().getResult().exists()){
+                Log.d("fart", "Tacklebox Existed Already");
+            }
+            else{
+                Log.d("fart", "Tacklebox Did not exist and needs to be created.");
+            }
             theNewBox.set(fire_tackleBox, SetOptions.merge())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

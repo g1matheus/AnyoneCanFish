@@ -491,17 +491,17 @@ public class MainActivity extends AppCompatActivity{
         mFS_Store = FirebaseFirestore.getInstance();
         //get specifically user firestore db data
         FirebaseGetUserInfo(mCurUser);
-
         FirestoreStuff myFirestore = new FirestoreStuff(mContext,mCurUser,mFS_Store);
+
         //get specifically game_fish firestore db data
         mGameFishArrayList = new ArrayList<Fire_GameFish>();
         myFirestore.Firestore_Get_GameFish(mGameFishArrayList);
 
-        //get specifically TackleBoxes firestore db data
+        //get specifically FishingTrips firestore db data
         mFishingTripsArray = new ArrayList<Fire_Trip>();
         myFirestore.Firestore_Get_FishingTrips(mFishingTripsArray);
 
-        //get specifically FishingTrips firestore db data
+        //get specifically TackleBoxes firestore db data
         mTackleBoxesArray = new ArrayList<Fire_TackleBox>();
         myFirestore.Firestore_Get_TackleBoxes(mTackleBoxesArray);
 

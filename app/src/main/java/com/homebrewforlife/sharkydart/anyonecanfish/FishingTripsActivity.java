@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
@@ -24,8 +25,16 @@ import android.widget.Toast;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.homebrewforlife.sharkydart.anyonecanfish.adapters.TripsRVAdapter;
 import com.homebrewforlife.sharkydart.anyonecanfish.fireX.FirestoreAdds;
 import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_Lure;
@@ -50,6 +59,11 @@ public class FishingTripsActivity extends AppCompatActivity {
     ArrayList<Fire_Trip> mTripsArrayList;
     TripsRVAdapter mTripsRVAdapter;
     RecyclerView mTripsRV;
+
+    private FirebaseAuth mAuthObj;
+    private EventListener<QuerySnapshot> mFsTripsEventListener;
+    private ListenerRegistration theRegistration;
+    private CollectionReference mFsTripsDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +90,9 @@ public class FishingTripsActivity extends AppCompatActivity {
         }else {
             mTripsArrayList = intent.getParcelableArrayListExtra(MainActivity.FISHING_TRIPS_ARRAYLIST);
         }
+
+        mAuthObj = FirebaseAuth.getInstance();
+        FirebaseUser theUser = mAuthObj.getCurrentUser();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fishingtrips_fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -152,53 +169,56 @@ public class FishingTripsActivity extends AppCompatActivity {
 
     private void attachFirestoreTripReadListener(){
         //construct a new listener if it doesn't exist
-//        if(mChildEventListener == null) {
-//            mChildEventListener = new ChildEventListener() {
-//                @Override
-//                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                    //gets called initially, for each, and also when one is added
-//                    FriendlyMessage friendlyMessage = dataSnapshot.getValue(FriendlyMessage.class);
-//                    mMessageAdapter.add(friendlyMessage);
-//                }
-//
-//                @Override
-//                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                }
-//
-//                @Override
-//                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-//                }
-//
-//                @Override
-//                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError databaseError) {
-//                }
-//            };
-//            mMessagesDatabaseReference.addChildEventListener(mChildEventListener);    //add that listener
-//        }
+        if(mFsTripsEventListener == null) {
+            mFsTripsEventListener = new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot snapshots,
+                                    @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.w("fart", "listen:error", e);
+                        return;
+                    }
+
+                    if(snapshots != null) {
+                        for (DocumentChange trip : snapshots.getDocumentChanges()) {
+                            switch (trip.getType()) {
+                                case ADDED:
+                                    Log.d("fart", "New trip: " + trip.getDocument().getData());
+                                    break;
+                                case MODIFIED:
+                                    Log.d("fart", "Modified trip: " + trip.getDocument().getData());
+                                    break;
+                                case REMOVED:
+                                    Log.d("fart", "Removed trip: " + trip.getDocument().getData());
+                                    break;
+                            }
+                        }
+                    }
+                }
+            };
+            theRegistration = mFsTripsDatabaseReference.addSnapshotListener(mFsTripsEventListener);    //add that listener
+        }
     }
-    private void detachDatabaseReadListener(){
-//        if(mChildEventListener != null) {
-//            mMessagesDatabaseReference.removeEventListener(mChildEventListener);
-//            mChildEventListener = null;
-//        }
+    private void detachFirestoreTripReadListener(){
+        if(mFsTripsEventListener != null) {
+            //mFsTripsDatabaseReference.removeEventListener(mFsTripsEventListener);
+            theRegistration.remove();
+            mFsTripsEventListener = null;
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         //attach Listener
-//        attachDatabaseReadListener();
+        attachFirestoreTripReadListener();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         //detach Listener
-//        detachDatabaseReadListener();
+        detachFirestoreTripReadListener();
 //        mTackleBoxAdapter.clear();
     }
 
