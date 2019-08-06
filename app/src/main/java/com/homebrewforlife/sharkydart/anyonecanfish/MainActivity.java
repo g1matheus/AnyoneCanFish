@@ -65,7 +65,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity{
-
+    private static final String LOG_TAG = "fart.Main";
     private int RC_SIGN_IN = 0;   //request code
     private final int RC_SWEET_PERMISSIONS = 1337;
     private MenuItem mMenuSign;
@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity{
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     FirebaseUser mCurUser;
 
+    FirestoreStuff myFirestoreStuff;
     //Firestore Database Reference
     FirebaseFirestore mFS_Store;
 //    private DatabaseReference mMessagesDatabaseReference;
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity{
     public static final String FISHING_TRIPS_ARRAYLIST = "fishing-trips-array-list";
     ArrayList<Fire_TackleBox> mTackleBoxesArray;
     public static final String TACKLE_BOXES_ARRAYLIST = "tackle-boxes-array-list";
+    public static final String FIRESTORE_USER = "firestore-auth-user-obj";
 
     //console message from firestore warned to include this code
     private void FirestoreWarningFromDevs(){
@@ -241,6 +243,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), FishingBasicsActivity.class);
+                intent.putExtra(FIRESTORE_USER, myFirestoreStuff.getmCurUser());
                 //intent.putExtra(/* name of data */, /* data */);
                 view.getContext().startActivity(intent);
             }
@@ -250,6 +253,7 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), GameFishActivity.class);
                 intent.putParcelableArrayListExtra(GAME_FISH_ARRAYLIST, mGameFishArrayList);
+                intent.putExtra(FIRESTORE_USER, myFirestoreStuff.getmCurUser());
                 view.getContext().startActivity(intent);
             }
         });
@@ -258,6 +262,7 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), FishingTripsActivity.class);
                 intent.putParcelableArrayListExtra(FISHING_TRIPS_ARRAYLIST, mFishingTripsArray);
+                intent.putExtra(FIRESTORE_USER, myFirestoreStuff.getmCurUser());
                 view.getContext().startActivity(intent);
             }
         });
@@ -266,6 +271,7 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), TackleBoxesActivity.class);
                 intent.putParcelableArrayListExtra(TACKLE_BOXES_ARRAYLIST, mTackleBoxesArray);
+                intent.putExtra(FIRESTORE_USER, myFirestoreStuff.getmCurUser());
                 view.getContext().startActivity(intent);
             }
         });
@@ -301,16 +307,16 @@ public class MainActivity extends AppCompatActivity{
             //try and get GPS coords, and send them back to get the weather
             GeoPoint coords = getCoordsFromSharedPrefs();
             if(coords == null) {
-                Log.d("fart", "no coords in shared prefs");
+                Log.d(LOG_TAG, "no coords in shared prefs");
                 startGettingLatLon();
             }
             else {   //use shared prefs to refresh weather, unless forceUpdate, in which case - get GPS coords again
                 if(forceUpdate){     //button was clicked to refresh GPS
-                    Log.d("fart", "button was clicked to refresh");
+                    Log.d(LOG_TAG, "button was clicked to refresh");
                     startGettingLatLon();
                 }
                 else {    //button was not clicked to refresh
-                    Log.d("fart", "button not clicked to refresh, and have coords already");
+                    Log.d(LOG_TAG, "button not clicked to refresh, and have coords already");
                     String prefsForecastURL = getForecastURLFromSharedPrefs();
                     if(prefsForecastURL != null)
                         startGettingForecastData(prefsForecastURL);
@@ -328,11 +334,11 @@ public class MainActivity extends AppCompatActivity{
         editor.apply();
     }
     public static GeoPoint getCoordsFromSharedPrefs(Context theContext){
-        Log.d("fart", "sent context for prefs...");
+        Log.d(LOG_TAG, "sent context for prefs...");
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(theContext);
         String lat = mSharedPreferences.getString(SHAREDPREFS_LAT, null);
         String lon = mSharedPreferences.getString(SHAREDPREFS_LON, null);
-        Log.d("fart", "[SHARED PREFS]: lat=" + lat + " lon=" + lon );
+        Log.d(LOG_TAG, "[SHARED PREFS]: lat=" + lat + " lon=" + lon );
         GeoPoint coords;
         if(lat != null && lon != null)
             coords = new GeoPoint(Double.valueOf(lat), Double.valueOf(lon));
@@ -341,11 +347,11 @@ public class MainActivity extends AppCompatActivity{
         return coords;
     }
     private GeoPoint getCoordsFromSharedPrefs(){
-        Log.d("fart", "using _mContext_ for prefs...");
+        Log.d(LOG_TAG, "using _mContext_ for prefs...");
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         String lat = mSharedPreferences.getString(SHAREDPREFS_LAT, null);
         String lon = mSharedPreferences.getString(SHAREDPREFS_LON, null);
-        Log.d("fart", "lat:" + lat + " lon:" + lon );
+        Log.d(LOG_TAG, "lat:" + lat + " lon:" + lon );
         GeoPoint coords;
         if(lat != null && lon != null)
             coords = new GeoPoint(Double.valueOf(lat), Double.valueOf(lon));
@@ -375,7 +381,7 @@ public class MainActivity extends AppCompatActivity{
 //        mLocReceiver = new MainLocationReceiver();
 //        mContext.registerReceiver(mLocReceiver, mLocReceiverFilter);
 
-        Log.d("fart", "[startService] - {getLatLonIntent}");
+        Log.d(LOG_TAG, "[startService] - {getLatLonIntent}");
         Intent getLatLonIntent = new Intent(this, LocationService.class);
         getLatLonIntent.setAction(LocationTasks.ACTION_GET_GPS_LOCATION);
         startService(getLatLonIntent);
@@ -386,7 +392,7 @@ public class MainActivity extends AppCompatActivity{
 //        mWeatherFirstReceiver = new MainWeatherFirstReceiver();
 //        mContext.registerReceiver(mWeatherFirstReceiver, mWeatherFirstReceiverFilter);
 
-        Log.d("fart", "[startService] - {getWeatherFirstIntent}");
+        Log.d(LOG_TAG, "[startService] - {getWeatherFirstIntent}");
         Intent getWeatherFirstIntent = new Intent(this, WeatherInfoService.class);
         getWeatherFirstIntent.putExtra(LocationTasks.EXTRA_LATITUDE, lat);
         getWeatherFirstIntent.putExtra(LocationTasks.EXTRA_LONGITUDE, lon);
@@ -394,13 +400,13 @@ public class MainActivity extends AppCompatActivity{
         startService(getWeatherFirstIntent);
     }
     private void startGettingForecastData(String theForecastApiUrl){
-        Log.d("fart", "forecast apiurl: " + theForecastApiUrl);
+        Log.d(LOG_TAG, "forecast apiurl: " + theForecastApiUrl);
 //        mForecastReceiverFilter = new IntentFilter();
 //        mForecastReceiverFilter.addAction(GetForecastDataTasks.ACTION_FOUND_FORECAST_DATA);
 //        mForecastReceiver = new MainForecastReceiver();
 //        mContext.registerReceiver(mForecastReceiver, mForecastReceiverFilter);
 
-        Log.d("fart", "[startService] - {getForecastIntent}");
+        Log.d(LOG_TAG, "[startService] - {getForecastIntent}");
         Intent getForecastIntent = new Intent(this, GetForecastDataService.class);
         getForecastIntent.putExtra(GetForecastDataTasks.EXTRA_THE_FORECAST_API_URL, theForecastApiUrl);
         getForecastIntent.setAction(GetForecastDataTasks.ACTION_GET_FORECAST_DATA);
@@ -412,7 +418,7 @@ public class MainActivity extends AppCompatActivity{
 //        mSolunarReceiver = new MainSolunarReceiver();
 //        mContext.registerReceiver(mSolunarReceiver, mSolunarReceiverFilter);
 
-        Log.d("fart", "[startService] - {getSolunarIntent}");
+        Log.d(LOG_TAG, "[startService] - {getSolunarIntent}");
         Intent getSolunarIntent = new Intent(this, GetSolunarDataService.class);
         getSolunarIntent.putExtra(GetSolunarDataTasks.EXTRA_SOLUNAR_DATE, theDate);
         getSolunarIntent.putExtra(GetSolunarDataTasks.EXTRA_SOLUNAR_LAT, theLat);
@@ -449,7 +455,7 @@ public class MainActivity extends AppCompatActivity{
         //FirebaseUser user = mAuth.getCurrentUser();
         try {
             if(theCurUser != null) {
-                Log.d("fart", "Name: " + theCurUser.getDisplayName()
+                Log.d(LOG_TAG, "Name: " + theCurUser.getDisplayName()
                         + " Email: " + theCurUser.getEmail()
                         + " UID: " + theCurUser.getUid());
                 if(theCurUser.getDisplayName() == null)
@@ -478,8 +484,8 @@ public class MainActivity extends AppCompatActivity{
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Log.d("fart", "User profile updated.");
-                            Log.d("fart", "Name: " + theUser.getDisplayName()
+                            Log.d(LOG_TAG, "User profile updated.");
+                            Log.d(LOG_TAG, "Name: " + theUser.getDisplayName()
                                     + " Email: " + theUser.getEmail()
                                     + " UID: " + theUser.getUid());
                         }
@@ -491,19 +497,19 @@ public class MainActivity extends AppCompatActivity{
         mFS_Store = FirebaseFirestore.getInstance();
         //get specifically user firestore db data
         FirebaseGetUserInfo(mCurUser);
-        FirestoreStuff myFirestore = new FirestoreStuff(mContext,mCurUser,mFS_Store);
+        myFirestoreStuff = new FirestoreStuff(mContext,mCurUser,mFS_Store);
 
         //get specifically game_fish firestore db data
         mGameFishArrayList = new ArrayList<Fire_GameFish>();
-        myFirestore.Firestore_Get_GameFish(mGameFishArrayList);
+        myFirestoreStuff.Firestore_Get_GameFish(mGameFishArrayList);
 
         //get specifically FishingTrips firestore db data
         mFishingTripsArray = new ArrayList<Fire_Trip>();
-        myFirestore.Firestore_Get_FishingTrips(mFishingTripsArray);
+        myFirestoreStuff.Firestore_Get_FishingTrips(mFishingTripsArray);
 
         //get specifically TackleBoxes firestore db data
         mTackleBoxesArray = new ArrayList<Fire_TackleBox>();
-        myFirestore.Firestore_Get_TackleBoxes(mTackleBoxesArray);
+        myFirestoreStuff.Firestore_Get_TackleBoxes(mTackleBoxesArray);
 
         setupOnClickListenersThatDependOnFirestore();
     }
@@ -521,7 +527,7 @@ public class MainActivity extends AppCompatActivity{
             }
             else {
                 if(response == null || resultCode == Activity.RESULT_CANCELED) {
-                    Log.d("fart", "User cancelled sign in");
+                    Log.d(LOG_TAG, "User cancelled sign in");
                     return;
                 }
                 if(response.getError() == null)
@@ -535,7 +541,7 @@ public class MainActivity extends AppCompatActivity{
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
                 // ...
-                Log.d("fart", "Sign-in failed");
+                Log.d(LOG_TAG, "Sign-in failed");
                 finish();
             }
         }
@@ -574,7 +580,7 @@ public class MainActivity extends AppCompatActivity{
     private class MainLocationReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("fart", "MainLocationReceiver Received Something...");
+            Log.d(LOG_TAG, "MainLocationReceiver Received Something...");
             String action = intent.getAction();
             if(LocationTasks.ACTION_FOUND_GPS_LOCATION.equals(action)){
                 double theLat, theLon;
@@ -588,16 +594,16 @@ public class MainActivity extends AppCompatActivity{
                 System.out.println("Current time => " + c);
                 SimpleDateFormat df = new SimpleDateFormat("MM/dd/YYYY", Locale.US);
                 String theDate = df.format(c);
-                Log.d("fart", "thedate: " + theDate);
+                Log.d(LOG_TAG, "thedate: " + theDate);
 
                 //need current timezone offset, from milliseconds to hours, as integer
                 int theTimeZone = TimeZone.getDefault().getRawOffset() / 1000 / 60 / 60;
-                Log.d("fart", "timezoneoffset: " + theTimeZone);
-                Log.d("fart", "*** start trying to get Solunar data ***");
+                Log.d(LOG_TAG, "timezoneoffset: " + theTimeZone);
+                Log.d(LOG_TAG, "*** start trying to get Solunar data ***");
                 startGettingSolunarData(theDate, theLat, theLon, theTimeZone);
             }
             else{
-                Log.d("fart", "-not found_gps action-: " + action);
+                Log.d(LOG_TAG, "-not found_gps action-: " + action);
             }
         }
     }
@@ -605,7 +611,7 @@ public class MainActivity extends AppCompatActivity{
     private class MainWeatherFirstReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("fart", "[[Weather First]] Receiver Received Something...");
+            Log.d(LOG_TAG, "[[Weather First]] Receiver Received Something...");
             String action = intent.getAction();
             if(WeatherInfoTasks.ACTION_FOUND_WEATHER_FORECAST_API.equals(action)){
                 String theWeatherAPIURL, theCity;
@@ -616,7 +622,7 @@ public class MainActivity extends AppCompatActivity{
                 startGettingForecastData(theWeatherAPIURL);
             }
             else{
-                Log.d("fart", "broadcast: " + action);
+                Log.d(LOG_TAG, "broadcast: " + action);
             }
         }
     }
@@ -624,14 +630,14 @@ public class MainActivity extends AppCompatActivity{
     private class MainForecastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("fart", "[[Forecast API call]] Receiver Received Something...");
+            Log.d(LOG_TAG, "[[Forecast API call]] Receiver Received Something...");
             String action = intent.getAction();
             if(GetForecastDataTasks.ACTION_FOUND_FORECAST_DATA.equals(action)){
                 mForecastPeriodsArrayList = intent.getParcelableArrayListExtra(GetForecastDataTasks.EXTRA_THE_FORECAST_DATA);
                 setupRecyclerView(mForecastRecyclerView);
             }
             else{
-                Log.d("fart", "broadcast: " + action);
+                Log.d(LOG_TAG, "broadcast: " + action);
             }
         }
     }
@@ -639,14 +645,14 @@ public class MainActivity extends AppCompatActivity{
     private class MainSolunarReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("fart", "[[Solunar API call]] Receiver Received Something...");
+            Log.d(LOG_TAG, "[[Solunar API call]] Receiver Received Something...");
             String action = intent.getAction();
             if(GetSolunarDataTasks.ACTION_FOUND_SOLUNAR_DATA.equals(action)){
                 mSolunarDataObj = intent.getParcelableExtra(GetSolunarDataTasks.EXTRA_THE_SOLUNAR_DATA);
                 setupRecyclerView(mForecastRecyclerView);
             }
             else{
-                Log.d("fart", "broadcast: " + action);
+                Log.d(LOG_TAG, "broadcast: " + action);
             }
         }
     }
@@ -657,28 +663,28 @@ public class MainActivity extends AppCompatActivity{
         mLocReceiverFilter.addAction(LocationTasks.ACTION_FOUND_GPS_LOCATION);
         mLocReceiver = new MainLocationReceiver();
         mContext.registerReceiver(mLocReceiver, mLocReceiverFilter);
-        Log.d("fart", "[registered receiver][mLocReceiver]");
+        Log.d(LOG_TAG, "[registered receiver][mLocReceiver]");
 
         //startGettingFirstWeather: 389
         mWeatherFirstReceiverFilter = new IntentFilter();
         mWeatherFirstReceiverFilter.addAction(WeatherInfoTasks.ACTION_FOUND_WEATHER_FORECAST_API);
         mWeatherFirstReceiver = new MainWeatherFirstReceiver();
         mContext.registerReceiver(mWeatherFirstReceiver, mWeatherFirstReceiverFilter);
-        Log.d("fart", "[registered receiver][mWeatherFirstReceiver]");
+        Log.d(LOG_TAG, "[registered receiver][mWeatherFirstReceiver]");
 
         //startGettingForecastData
         mForecastReceiverFilter = new IntentFilter();
         mForecastReceiverFilter.addAction(GetForecastDataTasks.ACTION_FOUND_FORECAST_DATA);
         mForecastReceiver = new MainForecastReceiver();
         mContext.registerReceiver(mForecastReceiver, mForecastReceiverFilter);
-        Log.d("fart", "[registered receiver][mForecastReceiver]");
+        Log.d(LOG_TAG, "[registered receiver][mForecastReceiver]");
 
         //startGettingSolunarData
         mSolunarReceiverFilter = new IntentFilter();
         mSolunarReceiverFilter.addAction(GetSolunarDataTasks.ACTION_FOUND_SOLUNAR_DATA);
         mSolunarReceiver = new MainSolunarReceiver();
         mContext.registerReceiver(mSolunarReceiver, mSolunarReceiverFilter);
-        Log.d("fart", "[registered receiver][mSolunarReceiver]");
+        Log.d(LOG_TAG, "[registered receiver][mSolunarReceiver]");
     }
 
     @Override
@@ -712,7 +718,7 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        Log.d("fart", "onDestroy called");
+//        Log.d(LOG_TAG, "onDestroy called");
 //        try {
 //            unregisterReceiver(mForecastReceiver);
 //            unregisterReceiver(mLocReceiver);

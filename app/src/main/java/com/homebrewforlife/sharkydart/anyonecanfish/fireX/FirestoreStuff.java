@@ -40,8 +40,16 @@ import java.util.concurrent.CountDownLatch;
 public class FirestoreStuff {
     @NonNull
     private Context mContext;
-    FirebaseUser mCurUser;
-    FirebaseFirestore mFS_Store;
+    public FirebaseUser mCurUser;
+
+    public FirebaseUser getmCurUser() {
+        return this.mCurUser;
+    }
+    public void setmCurUser(FirebaseUser theUser){
+        this.mCurUser = theUser;
+    }
+
+    public FirebaseFirestore mFS_Store;
     static DocumentReference mFS_User_document_ref;
     static CollectionReference mFS_GameFish_collection_ref;
     ArrayList<Fire_GameFish> mFire_GameFish_arraylist;

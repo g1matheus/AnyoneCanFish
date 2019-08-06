@@ -37,6 +37,7 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.homebrewforlife.sharkydart.anyonecanfish.adapters.TripsRVAdapter;
 import com.homebrewforlife.sharkydart.anyonecanfish.fireX.FirestoreAdds;
+import com.homebrewforlife.sharkydart.anyonecanfish.fireX.FirestoreStuff;
 import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_Lure;
 import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_Trip;
 import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_User;
@@ -51,7 +52,7 @@ import static com.homebrewforlife.sharkydart.anyonecanfish.MainActivity.SHAREDPR
 import static com.homebrewforlife.sharkydart.anyonecanfish.MainActivity.SHAREDPREFS_LON;
 
 public class FishingTripsActivity extends AppCompatActivity {
-
+    private static final String LOG_TAG = "fart.FishingTrips";
     public static final String FISHEVENT_ARRAYLIST = "homebrew-sharkydart-fishing-event";
     public static final String THE_TRIP = "homebrew-sharkydart-fishing-trip";
 
@@ -60,6 +61,7 @@ public class FishingTripsActivity extends AppCompatActivity {
     TripsRVAdapter mTripsRVAdapter;
     RecyclerView mTripsRV;
 
+    private FirestoreStuff firestoreStuff;
     private FirebaseAuth mAuthObj;
     private EventListener<QuerySnapshot> mFsTripsEventListener;
     private ListenerRegistration theRegistration;
@@ -93,6 +95,8 @@ public class FishingTripsActivity extends AppCompatActivity {
 
         mAuthObj = FirebaseAuth.getInstance();
         FirebaseUser theUser = mAuthObj.getCurrentUser();
+        firestoreStuff = new FirestoreStuff(mContext,theUser,FirebaseFirestore.getInstance());
+        mFsTripsDatabaseReference = firestoreStuff.getFsTripsRef();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fishingtrips_fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +132,7 @@ public class FishingTripsActivity extends AppCompatActivity {
                                     Toast.makeText(mContext, "mCurUser is null", Toast.LENGTH_LONG).show();
                             }
                         }).show();
-                Log.i("fart", "clicked FAB");
+                Log.i(LOG_TAG, "clicked FAB");
             }
         });
 
@@ -175,7 +179,7 @@ public class FishingTripsActivity extends AppCompatActivity {
                 public void onEvent(@Nullable QuerySnapshot snapshots,
                                     @Nullable FirebaseFirestoreException e) {
                     if (e != null) {
-                        Log.w("fart", "listen:error", e);
+                        Log.w(LOG_TAG, "listen:error", e);
                         return;
                     }
 
@@ -183,13 +187,13 @@ public class FishingTripsActivity extends AppCompatActivity {
                         for (DocumentChange trip : snapshots.getDocumentChanges()) {
                             switch (trip.getType()) {
                                 case ADDED:
-                                    Log.d("fart", "New trip: " + trip.getDocument().getData());
+                                    Log.d(LOG_TAG, "New trip: " + trip.getDocument().getData());
                                     break;
                                 case MODIFIED:
-                                    Log.d("fart", "Modified trip: " + trip.getDocument().getData());
+                                    Log.d(LOG_TAG, "Modified trip: " + trip.getDocument().getData());
                                     break;
                                 case REMOVED:
-                                    Log.d("fart", "Removed trip: " + trip.getDocument().getData());
+                                    Log.d(LOG_TAG, "Removed trip: " + trip.getDocument().getData());
                                     break;
                             }
                         }
