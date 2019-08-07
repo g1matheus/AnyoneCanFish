@@ -2,9 +2,7 @@ package com.homebrewforlife.sharkydart.anyonecanfish;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -19,7 +17,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.Timestamp;
@@ -27,18 +24,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.homebrewforlife.sharkydart.anyonecanfish.adapters.TripsRVAdapter;
+import com.homebrewforlife.sharkydart.anyonecanfish.adapters.FishingTripsRVAdapter;
 import com.homebrewforlife.sharkydart.anyonecanfish.fireX.FirestoreAdds;
 import com.homebrewforlife.sharkydart.anyonecanfish.fireX.FirestoreStuff;
-import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_Lure;
 import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_Trip;
 import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_User;
 
@@ -48,9 +42,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.homebrewforlife.sharkydart.anyonecanfish.MainActivity.SHAREDPREFS_LAT;
-import static com.homebrewforlife.sharkydart.anyonecanfish.MainActivity.SHAREDPREFS_LON;
-
 public class FishingTripsActivity extends AppCompatActivity {
     private static final String LOG_TAG = "fart.FishingTrips";
     public static final String FISHEVENT_ARRAYLIST = "homebrew-sharkydart-fishing-event";
@@ -58,7 +49,7 @@ public class FishingTripsActivity extends AppCompatActivity {
 
     private Context mContext;
     ArrayList<Fire_Trip> mTripsArrayList;
-    TripsRVAdapter mTripsRVAdapter;
+    FishingTripsRVAdapter mTripsRVAdapter;
     RecyclerView mTripsRV;
 
     private FirestoreStuff firestoreStuff;
@@ -83,6 +74,7 @@ public class FishingTripsActivity extends AppCompatActivity {
         if(savedInstanceState == null){
             mTripsArrayList = new ArrayList<>();
         }else if(savedInstanceState.containsKey(MainActivity.FISHING_TRIPS_ARRAYLIST)){
+            Log.d(LOG_TAG, "Loading fishing trips from savedinstancestate");
             mTripsArrayList = savedInstanceState.getParcelableArrayList(MainActivity.FISHING_TRIPS_ARRAYLIST);
         }
 
@@ -90,7 +82,7 @@ public class FishingTripsActivity extends AppCompatActivity {
         if (intent == null) {
             closeOnError();
         }else {
-            mTripsArrayList = intent.getParcelableArrayListExtra(MainActivity.FISHING_TRIPS_ARRAYLIST);
+//            mTripsArrayList = intent.getParcelableArrayListExtra(MainActivity.FISHING_TRIPS_ARRAYLIST);
         }
 
         mAuthObj = FirebaseAuth.getInstance();
@@ -143,7 +135,7 @@ public class FishingTripsActivity extends AppCompatActivity {
         setupRecyclerView(mTripsRV);
     }
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        mTripsRVAdapter = new TripsRVAdapter(this, mTripsArrayList);
+        mTripsRVAdapter = new FishingTripsRVAdapter(this, mTripsArrayList);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mTripsRVAdapter);
@@ -187,16 +179,21 @@ public class FishingTripsActivity extends AppCompatActivity {
                         for (DocumentChange trip : snapshots.getDocumentChanges()) {
                             switch (trip.getType()) {
                                 case ADDED:
-                                    Log.d(LOG_TAG, "New trip: " + trip.getDocument().getData());
+                                    Fire_Trip addedTrip = trip.getDocument().toObject(Fire_Trip.class);
+                                    Log.d(LOG_TAG, "the FIRE_TRIP: " + addedTrip.getQuickDescription());
+                                    mTripsArrayList.add(addedTrip);
                                     break;
                                 case MODIFIED:
-                                    Log.d(LOG_TAG, "Modified trip: " + trip.getDocument().getData());
+                                    Fire_Trip changedTrip = trip.getDocument().toObject(Fire_Trip.class);
+                                    Log.d(LOG_TAG, "Modified trip: " + changedTrip.getQuickDescription());
                                     break;
                                 case REMOVED:
-                                    Log.d(LOG_TAG, "Removed trip: " + trip.getDocument().getData());
+                                    Fire_Trip removedTrip = trip.getDocument().toObject(Fire_Trip.class);
+                                    Log.d(LOG_TAG, "Removed trip: " + removedTrip.getQuickDescription());
                                     break;
                             }
                         }
+                        mTripsRVAdapter.notifyDataSetChanged();
                     }
                 }
             };
@@ -223,7 +220,7 @@ public class FishingTripsActivity extends AppCompatActivity {
         super.onPause();
         //detach Listener
         detachFirestoreTripReadListener();
-//        mTackleBoxAdapter.clear();
+        mTripsArrayList.clear();
     }
 
     private void closeOnError() {

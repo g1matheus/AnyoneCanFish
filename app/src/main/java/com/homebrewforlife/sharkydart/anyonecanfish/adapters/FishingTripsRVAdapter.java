@@ -1,7 +1,6 @@
 package com.homebrewforlife.sharkydart.anyonecanfish.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -12,16 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.homebrewforlife.sharkydart.anyonecanfish.LuresActivity;
 import com.homebrewforlife.sharkydart.anyonecanfish.R;
-import com.homebrewforlife.sharkydart.anyonecanfish.TackleBoxesActivity;
-import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_TackleBox;
 import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_Trip;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class TripsRVAdapter extends RecyclerView.Adapter<TripsRVAdapter.ViewHolder> {
+public class FishingTripsRVAdapter extends RecyclerView.Adapter<FishingTripsRVAdapter.ViewHolder> {
     private Context mContext;
     private final ArrayList<Fire_Trip> mTripsArrayList;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -35,7 +30,7 @@ public class TripsRVAdapter extends RecyclerView.Adapter<TripsRVAdapter.ViewHold
         }
     };
 
-    public TripsRVAdapter(AppCompatActivity parent, ArrayList<Fire_Trip> items) {
+    public FishingTripsRVAdapter(AppCompatActivity parent, ArrayList<Fire_Trip> items) {
         mTripsArrayList = items;
         mContext = parent;
     }
