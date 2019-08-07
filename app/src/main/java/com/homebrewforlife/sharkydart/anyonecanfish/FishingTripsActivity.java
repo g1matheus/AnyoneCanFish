@@ -99,7 +99,7 @@ public class FishingTripsActivity extends AppCompatActivity {
         FirebaseUser theUser = mAuthObj.getCurrentUser();
         firestoreStuff = new FirestoreStuff(mContext,theUser,FirebaseFirestore.getInstance());
         mFsTripsDatabaseReference = firestoreStuff.getFsTripsRef();
-        mTripPhotosStorageReference = FirebaseStorage.getInstance().getReference().child("chat_photos");
+        mTripPhotosStorageReference = FirebaseStorage.getInstance().getReference().child("user").child(theUser.getUid());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fishingtrips_fab);
         fab.setOnClickListener(new View.OnClickListener() {
