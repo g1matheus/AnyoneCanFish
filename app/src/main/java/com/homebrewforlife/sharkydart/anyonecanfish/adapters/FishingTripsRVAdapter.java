@@ -1,6 +1,8 @@
 package com.homebrewforlife.sharkydart.anyonecanfish.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.homebrewforlife.sharkydart.anyonecanfish.FishingTripsActivity;
 import com.homebrewforlife.sharkydart.anyonecanfish.R;
+import com.homebrewforlife.sharkydart.anyonecanfish.TackleBoxesActivity;
 import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_Trip;
 
 import java.util.ArrayList;
@@ -27,6 +31,15 @@ public class FishingTripsRVAdapter extends RecyclerView.Adapter<FishingTripsRVAd
             //Intent intent = new Intent(mContext, TripDetailActivity.class);
             //intent.putExtra(TackleBoxesActivity.THE_TACKLEBOX, theBox);
             //mContext.startActivity(intent);
+
+            Intent ppIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            ppIntent.setType("image/jpeg");
+            ppIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+            ((Activity) mContext).startActivityForResult(
+                    Intent.createChooser(
+                            ppIntent,
+                            "Complete action using"),
+                    FishingTripsActivity.TRIP_PHOTO_PICKER);
         }
     };
 
@@ -56,10 +69,8 @@ public class FishingTripsRVAdapter extends RecyclerView.Adapter<FishingTripsRVAd
                     .into(holder.mImgTripPic);
 */
 
-        holder.itemView.setTag(mTripsArrayList.get(position));
-
-        //TODO - The following line is commented out because of another adapter
-        //holder.itemView.setOnClickListener(mOnClickListener);
+        holder.mImgTripPic.setTag(mTripsArrayList.get(position));
+        holder.mImgTripPic.setOnClickListener(mOnClickListener);
     }
 
     @Override

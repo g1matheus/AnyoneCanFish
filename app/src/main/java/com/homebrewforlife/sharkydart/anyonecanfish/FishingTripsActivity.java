@@ -2,6 +2,7 @@ package com.homebrewforlife.sharkydart.anyonecanfish;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,8 +18,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,6 +33,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.homebrewforlife.sharkydart.anyonecanfish.adapters.FishingTripsRVAdapter;
 import com.homebrewforlife.sharkydart.anyonecanfish.fireX.FirestoreAdds;
 import com.homebrewforlife.sharkydart.anyonecanfish.fireX.FirestoreStuff;
@@ -46,14 +52,18 @@ public class FishingTripsActivity extends AppCompatActivity {
     private static final String LOG_TAG = "fart.FishingTrips";
     public static final String FISHEVENT_ARRAYLIST = "homebrew-sharkydart-fishing-event";
     public static final String THE_TRIP = "homebrew-sharkydart-fishing-trip";
+    public static final int TRIP_PHOTO_PICKER =  2;
 
     private Context mContext;
     ArrayList<Fire_Trip> mTripsArrayList;
     FishingTripsRVAdapter mTripsRVAdapter;
     RecyclerView mTripsRV;
 
+    private ImageButton mPhotoPickerButton;
     private FirestoreStuff firestoreStuff;
     private FirebaseAuth mAuthObj;
+    private StorageReference mTripPhotosStorageReference;   //FirebaseStorage storage reference
+
     private EventListener<QuerySnapshot> mFsTripsEventListener;
     private ListenerRegistration theRegistration;
     private CollectionReference mFsTripsDatabaseReference;
@@ -89,6 +99,7 @@ public class FishingTripsActivity extends AppCompatActivity {
         FirebaseUser theUser = mAuthObj.getCurrentUser();
         firestoreStuff = new FirestoreStuff(mContext,theUser,FirebaseFirestore.getInstance());
         mFsTripsDatabaseReference = firestoreStuff.getFsTripsRef();
+        mTripPhotosStorageReference = FirebaseStorage.getInstance().getReference().child("chat_photos");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fishingtrips_fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -226,6 +237,38 @@ public class FishingTripsActivity extends AppCompatActivity {
     private void closeOnError() {
         finish();
         Toast.makeText(this, "Can't find Trips", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == TRIP_PHOTO_PICKER && resultCode == RESULT_OK){
+            if(data != null) {
+                Uri selectedImageUri = data.getData();
+                final StorageReference photoRef;
+
+                if (selectedImageUri != null) {
+                    String imagepathend = selectedImageUri.getLastPathSegment();
+                    if (imagepathend != null) {
+                        photoRef = mTripPhotosStorageReference.child(selectedImageUri.getLastPathSegment());
+                        photoRef.putFile(selectedImageUri).addOnSuccessListener(this,
+                                new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(
+                                                new OnSuccessListener<Uri>() {
+                                                    @Override
+                                                    public void onSuccess(Uri uri) {
+                                                        Log.d(LOG_TAG, "URL of photo in storage: " + uri.toString());
+                                                        //need to save this URL to the trip that was clicked
+                                                    }
+                                                });
+                                    }
+                                });
+                    }
+                }
+            }
+        }
     }
 
 }
