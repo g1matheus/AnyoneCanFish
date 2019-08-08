@@ -48,6 +48,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import static android.content.Intent.EXTRA_CHOSEN_COMPONENT;
+
 public class FishingTripsActivity extends AppCompatActivity {
     private static final String LOG_TAG = "fart.FishingTrips";
     public static final String FISHEVENT_ARRAYLIST = "homebrew-sharkydart-fishing-event";
@@ -139,8 +141,6 @@ public class FishingTripsActivity extends AppCompatActivity {
             }
         });
 
-        //todo: Recycler View needs to be tied to a listener getting snapshots of changing documents
-        //      - documents in Trips collection should be added to and removed from recycler view via a listener
         mTripsRV = findViewById(R.id.rvTrips);
         assert mTripsRV != null;
         setupRecyclerView(mTripsRV);
@@ -191,16 +191,19 @@ public class FishingTripsActivity extends AppCompatActivity {
                             switch (trip.getType()) {
                                 case ADDED:
                                     Fire_Trip addedTrip = trip.getDocument().toObject(Fire_Trip.class);
+                                    addedTrip.setUid(trip.getDocument().getId());
                                     Log.d(LOG_TAG, "the FIRE_TRIP: " + addedTrip.getQuickDescription());
                                     mTripsArrayList.add(addedTrip);
                                     break;
                                 case MODIFIED:
                                     Fire_Trip changedTrip = trip.getDocument().toObject(Fire_Trip.class);
                                     Log.d(LOG_TAG, "Modified trip: " + changedTrip.getQuickDescription());
+                                    mTripsArrayList.set(trip.getNewIndex(),trip.getDocument().toObject(Fire_Trip.class));
                                     break;
                                 case REMOVED:
                                     Fire_Trip removedTrip = trip.getDocument().toObject(Fire_Trip.class);
                                     Log.d(LOG_TAG, "Removed trip: " + removedTrip.getQuickDescription());
+                                    mTripsArrayList.remove(trip.getOldIndex());
                                     break;
                             }
                         }
@@ -240,10 +243,11 @@ public class FishingTripsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(final int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == TRIP_PHOTO_PICKER && resultCode == RESULT_OK){
+        if(requestCode >= 0 && resultCode == RESULT_OK){
             if(data != null) {
+                Log.d(LOG_TAG, "index in array clicked = " + requestCode);
                 Uri selectedImageUri = data.getData();
                 final StorageReference photoRef;
 
@@ -261,6 +265,7 @@ public class FishingTripsActivity extends AppCompatActivity {
                                                     public void onSuccess(Uri uri) {
                                                         Log.d(LOG_TAG, "URL of photo in storage: " + uri.toString());
                                                         //need to save this URL to the trip that was clicked
+                                                        mTripsArrayList.get(requestCode).setImage_url(uri.toString());
                                                     }
                                                 });
                                     }
