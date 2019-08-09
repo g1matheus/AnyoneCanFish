@@ -93,15 +93,21 @@ public class FishingTripsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent == null) {
             closeOnError();
-        }else {
-//            mTripsArrayList = intent.getParcelableArrayListExtra(MainActivity.FISHING_TRIPS_ARRAYLIST);
         }
+/*
+        else {
+            mTripsArrayList = intent.getParcelableArrayListExtra(MainActivity.FISHING_TRIPS_ARRAYLIST);
+        }
+*/
 
         mAuthObj = FirebaseAuth.getInstance();
         FirebaseUser theUser = mAuthObj.getCurrentUser();
-        firestoreStuff = new FirestoreStuff(mContext,theUser,FirebaseFirestore.getInstance());
-        mFsTripsDatabaseReference = firestoreStuff.getFsTripsRef();
-        mTripPhotosStorageReference = FirebaseStorage.getInstance().getReference().child("user").child(theUser.getUid());
+        if(theUser != null) {
+            firestoreStuff = new FirestoreStuff(mContext, theUser, FirebaseFirestore.getInstance());
+            mFsTripsDatabaseReference = firestoreStuff.getFsTripsRef();
+            mTripPhotosStorageReference = FirebaseStorage.getInstance().getReference().child("user").child(theUser.getUid());
+        }else
+            closeOnError();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fishingtrips_fab);
         fab.setOnClickListener(new View.OnClickListener() {

@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), FishingTripsActivity.class);
-                intent.putParcelableArrayListExtra(FISHING_TRIPS_ARRAYLIST, mFishingTripsArray);
+                //intent.putParcelableArrayListExtra(FISHING_TRIPS_ARRAYLIST, mFishingTripsArray);
                 intent.putExtra(FIRESTORE_USER, myFirestoreStuff.getmCurUser());
                 view.getContext().startActivity(intent);
             }
@@ -504,8 +504,8 @@ public class MainActivity extends AppCompatActivity{
         myFirestoreStuff.Firestore_Get_GameFish(mGameFishArrayList);
 
         //get specifically FishingTrips firestore db data
-        mFishingTripsArray = new ArrayList<Fire_Trip>();
-        myFirestoreStuff.Firestore_Get_FishingTrips(mFishingTripsArray);
+        //mFishingTripsArray = new ArrayList<Fire_Trip>();
+        //myFirestoreStuff.Firestore_Get_FishingTrips(mFishingTripsArray);
 
         //get specifically TackleBoxes firestore db data
         mTackleBoxesArray = new ArrayList<Fire_TackleBox>();
