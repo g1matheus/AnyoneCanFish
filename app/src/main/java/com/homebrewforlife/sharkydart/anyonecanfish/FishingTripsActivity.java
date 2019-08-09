@@ -266,6 +266,8 @@ public class FishingTripsActivity extends AppCompatActivity {
                                                         Log.d(LOG_TAG, "URL of photo in storage: " + uri.toString());
                                                         //need to save this URL to the trip that was clicked
                                                         mTripsArrayList.get(requestCode).setImage_url(uri.toString());
+                                                        mFsTripsDatabaseReference.document(mTripsArrayList.get(requestCode).getUid())
+                                                                .update("image_url", uri.toString());
                                                     }
                                                 });
                                     }
