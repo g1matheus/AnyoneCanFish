@@ -1,5 +1,6 @@
 package com.homebrewforlife.sharkydart.anyonecanfish.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -9,19 +10,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.homebrewforlife.sharkydart.anyonecanfish.LuresActivity;
+import com.homebrewforlife.sharkydart.anyonecanfish.FishingTripsActivity;
 import com.homebrewforlife.sharkydart.anyonecanfish.R;
 import com.homebrewforlife.sharkydart.anyonecanfish.TackleBoxesActivity;
-import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_TackleBox;
 import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_Trip;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class TripsRVAdapter extends RecyclerView.Adapter<TripsRVAdapter.ViewHolder> {
+public class FishingTripsRVAdapter extends RecyclerView.Adapter<FishingTripsRVAdapter.ViewHolder> {
     private Context mContext;
     private final ArrayList<Fire_Trip> mTripsArrayList;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -30,12 +31,21 @@ public class TripsRVAdapter extends RecyclerView.Adapter<TripsRVAdapter.ViewHold
             Fire_Trip theTrip = (Fire_Trip)view.getTag();
             Log.d("fart", "Clicked trip: " + theTrip.getUid() + " " + theTrip.getDesc() + " " + theTrip.getName());
             //Intent intent = new Intent(mContext, TripDetailActivity.class);
-            //intent.putExtra(TackleBoxesActivity.THE_TACKLEBOX, theBox);
+            //intent.putExtra(TackleBoxesActivity.THE_TACKLEBOX, theTrip);
             //mContext.startActivity(intent);
+
+            Intent ppIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            ppIntent.setType("image/jpeg");
+            ppIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+            ((Activity) mContext).startActivityForResult(
+                    Intent.createChooser(
+                            ppIntent,
+                            "Complete action using"),
+                    mTripsArrayList.indexOf(theTrip));
         }
     };
 
-    public TripsRVAdapter(AppCompatActivity parent, ArrayList<Fire_Trip> items) {
+    public FishingTripsRVAdapter(AppCompatActivity parent, ArrayList<Fire_Trip> items) {
         mTripsArrayList = items;
         mContext = parent;
     }
@@ -52,19 +62,15 @@ public class TripsRVAdapter extends RecyclerView.Adapter<TripsRVAdapter.ViewHold
         holder.mTvTripName.setText(mTripsArrayList.get(position).getName());
         holder.mTvTripDesc.setText(mTripsArrayList.get(position).getDesc());
 
-/*
         if(mTripsArrayList.get(position).getImage_url() != null && !mTripsArrayList.get(position).getImage_url().isEmpty())
             Picasso.get().load(mTripsArrayList.get(position).getImage_url())
                     .into(holder.mImgTripPic);
         else
-            Picasso.get().load(R.drawable.t_b_open_smallbrown)  //need default trip Image
+            Picasso.get().load(R.drawable.default_trip)  //need default trip Image
                     .into(holder.mImgTripPic);
-*/
 
-        holder.itemView.setTag(mTripsArrayList.get(position));
-
-        //TODO - The following line is commented out because of another adapter
-        //holder.itemView.setOnClickListener(mOnClickListener);
+        holder.mImgPicker.setTag(mTripsArrayList.get(position));
+        holder.mImgPicker.setOnClickListener(mOnClickListener);
     }
 
     @Override
@@ -76,12 +82,14 @@ public class TripsRVAdapter extends RecyclerView.Adapter<TripsRVAdapter.ViewHold
         TextView mTvTripDesc;
         TextView mTvTripName;
         ImageView mImgTripPic;
+        ImageButton mImgPicker;
 
         ViewHolder(View view) {
             super(view);
             mTvTripDesc = view.findViewById(R.id.tvTripDesc);
             mTvTripName = view.findViewById(R.id.tvTripName);
             mImgTripPic = view.findViewById(R.id.imgTripPic);
+            mImgPicker = view.findViewById(R.id.btnImgPicker);
         }
     }
 }

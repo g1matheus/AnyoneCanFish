@@ -16,18 +16,21 @@ public class Fire_Trip implements Parcelable{
     private double longitude;
     private String name;
     private String desc;
-    private Timestamp dateStart;    //using @ServerTimestamp annotation to a Date field indicates treatment as a server timestamp
-    private Timestamp dateEnd;      //using @ServerTimestamp annotation to a Date field indicates treatment as a server timestamp
+    private String image_url;
+    //using @ServerTimestamp annotation to a Date field indicates treatment as a server timestamp
+    private Timestamp dateStart;
+    private Timestamp dateEnd;
     private GeoPoint geo_loc;
 
     public Fire_Trip(){}
 
-    public Fire_Trip(String uid, double latitude, double longitude, String name, String desc, Timestamp dateStart, Timestamp dateEnd) {
+    public Fire_Trip(String uid, double latitude, double longitude, String name, String desc, String image_url, Timestamp dateStart, Timestamp dateEnd) {
         this.uid = uid;
         this.latitude = latitude;
         this.longitude = longitude;
         this.name = name;
         this.desc = desc;
+        this.image_url = image_url;
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         syncGeoPoint();
@@ -38,6 +41,7 @@ public class Fire_Trip implements Parcelable{
         syncCoords();
         this.name = name;
         this.desc = desc;
+        this.image_url = "";
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
 //        Fire_Trip(geo_loc.getLatitude(), geo_loc.getLongitude(), name, desc, dateStart, dateEnd);
@@ -46,6 +50,7 @@ public class Fire_Trip implements Parcelable{
         this.uid = in.readString();
         this.name = in.readString();
         this.desc = in.readString();
+        this.image_url = in.readString();
         this.latitude = in.readDouble();
         this.longitude = in.readDouble();
         this.dateStart = in.readParcelable(Timestamp.class.getClassLoader());
@@ -57,6 +62,7 @@ public class Fire_Trip implements Parcelable{
         out.writeString(uid);
         out.writeString(name);
         out.writeString(desc);
+        out.writeString(image_url);
         out.writeDouble(latitude);
         out.writeDouble(longitude);
         out.writeParcelable(dateStart, flags);
@@ -124,6 +130,14 @@ public class Fire_Trip implements Parcelable{
         this.desc = desc;
     }
 
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
+
     public Timestamp getDateStart() {
         return dateStart;
     }
@@ -150,9 +164,10 @@ public class Fire_Trip implements Parcelable{
 
     @Exclude
     public String getQuickDescription(){
-        return "uid: " + uid
+        return "\nuid: " + uid
                 + "\n=> " + name
                 + "\n=> " + desc
+                + "\n=> " + image_url
                 + "\n=> " + latitude + ", " + longitude
                 + "\n=> " + dateStart
                 + "\n=> " + dateEnd;

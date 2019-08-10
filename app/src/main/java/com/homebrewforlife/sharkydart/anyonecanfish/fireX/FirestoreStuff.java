@@ -40,8 +40,16 @@ import java.util.concurrent.CountDownLatch;
 public class FirestoreStuff {
     @NonNull
     private Context mContext;
-    FirebaseUser mCurUser;
-    FirebaseFirestore mFS_Store;
+    public FirebaseUser mCurUser;
+
+    public FirebaseUser getmCurUser() {
+        return this.mCurUser;
+    }
+    public void setmCurUser(FirebaseUser theUser){
+        this.mCurUser = theUser;
+    }
+
+    public FirebaseFirestore mFS_Store;
     static DocumentReference mFS_User_document_ref;
     static CollectionReference mFS_GameFish_collection_ref;
     ArrayList<Fire_GameFish> mFire_GameFish_arraylist;
@@ -114,9 +122,14 @@ public class FirestoreStuff {
                     }
                 });
     }
+
+    public CollectionReference getFsGamefishRef(){
+        return mFS_Store.collection(mContext.getString(R.string.db_game_fish));
+    }
     public void Firestore_Get_GameFish(final ArrayList<Fire_GameFish> theGameFish){
         try {
-            mFS_GameFish_collection_ref = mFS_Store.collection(mContext.getString(R.string.db_game_fish));
+            mFS_GameFish_collection_ref = getFsGamefishRef();
+//                    mFS_Store.collection(mContext.getString(R.string.db_game_fish));
             mFS_GameFish_collection_ref.get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
@@ -141,10 +154,19 @@ public class FirestoreStuff {
             e.printStackTrace();
         }
     }
+
+    public CollectionReference getFsTripsRef(){
+        return mFS_Store
+                .collection(mContext.getString(R.string.db_users))
+                .document(mCurUser.getUid())
+                .collection(mContext.getString(R.string.db_trips));
+
+    }
     public void Firestore_Get_FishingTrips(final ArrayList<Fire_Trip> theFishingTrips){
         try{
-            mFS_Trips_collection_ref = mFS_Store.collection(mContext.getString(R.string.db_users))
-                    .document(mCurUser.getUid()).collection(mContext.getString(R.string.db_trips));
+            mFS_Trips_collection_ref = getFsTripsRef();
+//                    mFS_Store.collection(mContext.getString(R.string.db_users))
+//                    .document(mCurUser.getUid()).collection(mContext.getString(R.string.db_trips));
             mFS_Trips_collection_ref.get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
@@ -171,15 +193,25 @@ public class FirestoreStuff {
             e.printStackTrace();
         }
     }
+
+    public CollectionReference getFsFisheventsRef(String the_trip_uid){
+        return mFS_Store
+                .collection(mContext.getString(R.string.db_users))
+                .document(mCurUser.getUid())
+                .collection(mContext.getString(R.string.db_trips))
+                .document(the_trip_uid)
+                .collection(mContext.getString(R.string.db_fish_events));
+    }
     public void Firestore_Get_Trip_FishEvents(String uid_trip, final ArrayList<Fire_FishEvent> theFishEvents){
         try
         {
-            CollectionReference FS_Trip_FishEvents = mFS_Store
-                    .collection(mContext.getString(R.string.db_users))
-                    .document(mCurUser.getUid())
-                    .collection(mContext.getString(R.string.db_trips))
-                    .document(uid_trip)
-                    .collection(mContext.getString(R.string.db_fish_events));
+            CollectionReference FS_Trip_FishEvents = getFsFisheventsRef(uid_trip);
+//                    mFS_Store
+//                    .collection(mContext.getString(R.string.db_users))
+//                    .document(mCurUser.getUid())
+//                    .collection(mContext.getString(R.string.db_trips))
+//                    .document(uid_trip)
+//                    .collection(mContext.getString(R.string.db_fish_events));
             FS_Trip_FishEvents.get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
@@ -213,12 +245,20 @@ public class FirestoreStuff {
             e.printStackTrace();
         }
     }
+
+    public CollectionReference getFsTackleboxRef(){
+        return mFS_Store
+                .collection(mContext.getString(R.string.db_users))
+                .document(mCurUser.getUid())
+                .collection(mContext.getString(R.string.db_tackle_boxes));
+    }
     public void Firestore_Get_TackleBoxes(final ArrayList<Fire_TackleBox> theTackleBoxes){
         try{
-            mFS_TackleBox_collection_ref = mFS_Store
-                    .collection(mContext.getString(R.string.db_users))
-                    .document(mCurUser.getUid())
-                    .collection(mContext.getString(R.string.db_tackle_boxes));
+            mFS_TackleBox_collection_ref = getFsTackleboxRef();
+//                    mFS_Store
+//                    .collection(mContext.getString(R.string.db_users))
+//                    .document(mCurUser.getUid())
+//                    .collection(mContext.getString(R.string.db_tackle_boxes));
             mFS_TackleBox_collection_ref.get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
@@ -245,17 +285,27 @@ public class FirestoreStuff {
             e.printStackTrace();
         }
     }
+
+    public CollectionReference getFsLuresRef(String the_tacklebox_uid){
+        return mFS_Store
+                .collection(mContext.getString(R.string.db_users))
+                .document(mCurUser.getUid())
+                .collection(mContext.getString(R.string.db_tackle_boxes))
+                .document(the_tacklebox_uid)
+                .collection(mContext.getString(R.string.db_lures));
+    }
     public void Firestore_Get_TackleBox_Lures(String uid_tacklebox, final ArrayList<Fire_Lure> theLures) {
         Firestore_Get_TackleBox_Lures(uid_tacklebox, theLures, null);
     }
     public void Firestore_Get_TackleBox_Lures(String uid_tacklebox, final ArrayList<Fire_Lure> theLures, final CountDownLatch signal){
         try {
-            CollectionReference FS_tacklebox_lures = mFS_Store
-                    .collection(mContext.getString(R.string.db_users))
-                    .document(mCurUser.getUid())
-                    .collection(mContext.getString(R.string.db_tackle_boxes))
-                    .document(uid_tacklebox)
-                    .collection(mContext.getString(R.string.db_lures));
+            CollectionReference FS_tacklebox_lures = getFsLuresRef(uid_tacklebox);
+//                    mFS_Store
+//                    .collection(mContext.getString(R.string.db_users))
+//                    .document(mCurUser.getUid())
+//                    .collection(mContext.getString(R.string.db_tackle_boxes))
+//                    .document(uid_tacklebox)
+//                    .collection(mContext.getString(R.string.db_lures));
             FS_tacklebox_lures.get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override

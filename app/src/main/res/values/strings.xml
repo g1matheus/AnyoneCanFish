@@ -33,6 +33,8 @@
     <string name="content_outlook">Fishing Outlook</string>
     <string name="content_fish_image">Image of a fish</string>
     <string name="content_lure_image">Image of a type of lure</string>
+    <string name="content_trip_image">Image of the trip</string>
+    <string name="trip_image_picker">Select a trip image</string>
     <string name="content_log_event_icon">Icon of a leaping fish</string>
     <string name="content_forecast_icon">Representation of Forecast</string>
     <string name="content_tackle_box_image">Image of a tackle box</string>
