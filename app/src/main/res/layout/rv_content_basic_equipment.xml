@@ -40,7 +40,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/adamina"
-                android:textColor="@color/paper_300"
+                android:textColor="?android:attr/textColorPrimary"
                 android:textSize="24sp"
                 tools:text="Title"
                 />
@@ -53,6 +53,7 @@
             android:layout_margin="@dimen/text_margin"
             android:fontFamily="@font/adamina"
             android:textSize="14sp"
+            android:textColor="?android:attr/textColorPrimary"
             android:textAppearance="?attr/textAppearanceListItem"
             tools:text="basic equipment info"/>
     </LinearLayout>

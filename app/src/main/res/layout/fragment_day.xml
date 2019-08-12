@@ -26,6 +26,7 @@
                 android:gravity="center"
                 android:paddingStart="@dimen/list_side_margin"
                 android:paddingEnd="@dimen/list_side_margin"
+                android:textColor="?android:attr/textColorPrimary"
                 tools:text="Today" />
             <TextView
                 android:id="@+id/tvFracillum"
@@ -34,6 +35,7 @@
                 android:gravity="start"
                 android:paddingStart="@dimen/list_side_margin"
                 android:paddingEnd="@dimen/list_side_margin"
+                android:textColor="?android:attr/textColorPrimary"
                 tools:text="97%" />
             <TextView
                 android:id="@+id/tvMoonPhase"
@@ -42,6 +44,7 @@
                 android:gravity="end"
                 android:paddingStart="@dimen/list_side_margin"
                 android:paddingEnd="@dimen/list_side_margin"
+                android:textColor="?android:attr/textColorPrimary"
                 tools:text="Waning Gibbous" />
         </FrameLayout>
         <TextView
@@ -52,6 +55,7 @@
             android:background="@color/paper_500"
             android:paddingStart="@dimen/list_side_margin"
             android:paddingEnd="@dimen/list_side_margin"
+            android:textColor="?android:attr/textColorPrimary"
             tools:text="Chance Freezing Rain then Chance Light Rain" />
         <LinearLayout
             android:layout_width="match_parent"
@@ -74,6 +78,7 @@
                 android:paddingStart="@dimen/text_margin_small"
                 android:paddingEnd="@dimen/text_margin_small"
                 android:textSize="32sp"
+                android:textColor="?android:attr/textColorPrimary"
                 tools:text="50.0 F" />
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -91,6 +96,7 @@
                     android:paddingStart="@dimen/text_margin"
                     android:paddingEnd="@dimen/text_margin"
                     android:textSize="18sp"
+                    android:textColor="?android:attr/textColorPrimary"
                     tools:text="4 mph" />
                 <TextView
                     android:id="@+id/tvWindDirection"
@@ -101,6 +107,7 @@
                     android:paddingStart="@dimen/text_margin"
                     android:paddingEnd="@dimen/text_margin"
                     android:textSize="18sp"
+                    android:textColor="?android:attr/textColorPrimary"
                     tools:text="NW" />
             </LinearLayout>
             <FrameLayout
@@ -132,6 +139,7 @@
                 android:gravity="center"
                 android:layout_weight="1"
                 android:background="@color/sun_300"
+                android:textColor="?android:attr/textColorPrimary"
                 tools:text="7:31 AM" />
 
             <TextView
@@ -141,6 +149,7 @@
                 android:gravity="center"
                 android:layout_weight="1"
                 android:background="@color/sun_700"
+                android:textColor="?android:attr/textColorPrimary"
                 tools:text="12:25 PM" />
 
             <TextView
@@ -150,6 +159,7 @@
                 android:gravity="center"
                 android:layout_weight="1"
                 android:background="@color/sun_300"
+                android:textColor="?android:attr/textColorPrimary"
                 tools:text="5:18 PM" />
         </LinearLayout>
         <LinearLayout
@@ -166,6 +176,7 @@
                 android:gravity="center"
                 android:layout_weight="1"
                 android:background="@color/moon_300"
+                android:textColor="?android:attr/textColorPrimary"
                 tools:text="6:55 PM" />
 
             <TextView
@@ -175,6 +186,7 @@
                 android:gravity="center"
                 android:layout_weight="1"
                 android:background="@color/moon_700"
+                android:textColor="?android:attr/textColorPrimary"
                 tools:text="1:24 AM" />
 
             <TextView
@@ -184,6 +196,7 @@
                 android:gravity="center"
                 android:layout_weight="1"
                 android:background="@color/moon_300"
+                android:textColor="?android:attr/textColorPrimary"
                 tools:text="8:49 AM" />
         </LinearLayout>
     </LinearLayout>
