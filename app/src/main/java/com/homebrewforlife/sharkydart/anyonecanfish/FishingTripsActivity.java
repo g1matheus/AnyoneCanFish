@@ -2,6 +2,7 @@ package com.homebrewforlife.sharkydart.anyonecanfish;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -42,6 +43,7 @@ import com.homebrewforlife.sharkydart.anyonecanfish.fireX.FirestoreStuff;
 import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_Trip;
 import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_User;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,6 +57,9 @@ public class FishingTripsActivity extends AppCompatActivity {
     public static final String FISHEVENT_ARRAYLIST = "homebrew-sharkydart-fishing-event";
     public static final String THE_TRIP = "homebrew-sharkydart-fishing-trip";
     public static final int TRIP_PHOTO_PICKER =  2;
+    public static final int REQUEST_FISH_THUMBNAIL_CAPTURE = -3;
+    public static final int REQUEST_FISH_BIG_CAPTURE = -4;
+    public static String mCurrentPhotoPath;
 
     private Context mContext;
     ArrayList<Fire_Trip> mTripsArrayList;
@@ -251,7 +256,16 @@ public class FishingTripsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode >= 0 && resultCode == RESULT_OK){
+        if (requestCode == REQUEST_FISH_THUMBNAIL_CAPTURE && resultCode == RESULT_OK){
+            if(data != null) {
+                Bundle extras = data.getExtras();
+                if(extras != null) {
+                    Bitmap imageBitmap = (Bitmap)extras.get("data");
+                    //ImageView to display in:
+                    //imageView.setImageBitmap(imageBitmap);
+                }
+            }
+        }else if(requestCode >= 0 && resultCode == RESULT_OK){
             if(data != null) {
                 Log.d(LOG_TAG, "index in array clicked = " + requestCode);
                 Uri selectedImageUri = data.getData();
@@ -284,4 +298,11 @@ public class FishingTripsActivity extends AppCompatActivity {
         }
     }
 
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
 }
