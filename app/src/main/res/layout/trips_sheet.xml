@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|center_horizontal"
+        android:textSize="21sp"
+        android:text="Add New Trip"
+        android:padding="4dp"
+        tools:ignore="HardcodedText" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|center_horizontal"
+        android:textSize="12sp"
+        android:text="w/Details"
+        android:padding="4dp"
+        tools:ignore="HardcodedText" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:weightSum="9"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="@string/trip_sheet_name"
+                android:padding="8dp"/>
+            <EditText
+                android:importantForAutofill="no"
+                android:id="@+id/etTripName"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:inputType="text"
+                android:hint="@string/trip_sheet_name_box"
+                tools:ignore="UnusedAttribute" />
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="*required"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:text="@string/trip_sheet_desc"
+        android:textSize="12sp"
+        android:padding="8dp"/>
+    <EditText
+        android:id="@+id/etTripDesc"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:textSize="12sp"
+        android:lines="2"
+        android:inputType="text"
+        android:hint="@string/trip_sheet_desc_box"
+        android:gravity="start"
+        tools:ignore="Autofill" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="11"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="@string/trip_sheet_dates"
+            android:textSize="12sp"
+            android:padding="8dp"/>
+        <EditText
+            android:importantForAutofill="no"
+            android:id="@+id/etTripStart"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:padding="4dp"
+            android:inputType="date"
+            android:hint="@string/trip_sheet_from_box"
+            tools:ignore="UnusedAttribute" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="TO"
+            android:textSize="12sp"
+            android:padding="4dp"
+            tools:ignore="HardcodedText" />
+        <EditText
+            android:importantForAutofill="no"
+            android:id="@+id/etTripEnd"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:padding="4dp"
+            android:inputType="date"
+            android:hint="@string/trip_sheet_until_box"
+            tools:ignore="UnusedAttribute" />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="18"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="@string/trip_sheet_gps"
+            android:textSize="12sp"
+            android:padding="8dp"/>
+        <EditText
+            android:importantForAutofill="no"
+            android:id="@+id/etTripLat"
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:padding="8dp"
+            android:inputType="numberDecimal"
+            android:hint="@string/trip_sheet_lat_box"
+            tools:ignore="UnusedAttribute" />
+
+        <ImageButton
+            android:id="@+id/btnGpsLookup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:contentDescription="@string/trip_sheet_gps_hint"
+            android:padding="2dp"
+            android:src="@android:drawable/ic_menu_mylocation" />
+        <EditText
+            android:importantForAutofill="no"
+            android:id="@+id/etTripLon"
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:padding="8dp"
+            android:inputType="numberDecimal"
+            android:hint="@string/trip_sheet_lon_box"
+            tools:ignore="UnusedAttribute" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/btnAddTrip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="8dp"
+        android:text="@string/trip_sheet_add_btn"
+        android:hint="@string/trip_sheet_add_hint"/>
+
+</LinearLayout>

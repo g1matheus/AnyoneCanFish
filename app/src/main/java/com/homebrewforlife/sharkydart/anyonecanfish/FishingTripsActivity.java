@@ -52,7 +52,7 @@ import java.util.Locale;
 
 import static android.content.Intent.EXTRA_CHOSEN_COMPONENT;
 
-public class FishingTripsActivity extends AppCompatActivity {
+public class FishingTripsActivity extends AppCompatActivity implements TripDetailsSheet.TripSheetListener {
     private static final String LOG_TAG = "fart.FishingTrips";
     public static final String FISHEVENT_ARRAYLIST = "homebrew-sharkydart-fishing-event";
     public static final String THE_TRIP = "homebrew-sharkydart-fishing-trip";
@@ -60,6 +60,7 @@ public class FishingTripsActivity extends AppCompatActivity {
     public static final int REQUEST_FISH_THUMBNAIL_CAPTURE = -3;
     public static final int REQUEST_FISH_BIG_CAPTURE = -4;
     public static String mCurrentPhotoPath;
+    private static final String mSheetTag = "AddTripBottomModalSheet";
 
     private Context mContext;
     ArrayList<Fire_Trip> mTripsArrayList;
@@ -118,6 +119,10 @@ public class FishingTripsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                todo: instead of snackbar, have it open a model bottom sheet - trips_sheet.xml
+                TripDetailsSheet tripSheet = new TripDetailsSheet();
+                tripSheet.show(getSupportFragmentManager(), mSheetTag);
+/*
                 Snackbar.make(view, "Add a Trip!", Snackbar.LENGTH_LONG)
                         .setAction("Add Trip", new View.OnClickListener() {
                             @Override
@@ -148,6 +153,7 @@ public class FishingTripsActivity extends AppCompatActivity {
                                     Toast.makeText(mContext, "mCurUser is null", Toast.LENGTH_LONG).show();
                             }
                         }).show();
+*/
                 Log.i(LOG_TAG, "clicked FAB");
             }
         });
@@ -304,5 +310,17 @@ public class FishingTripsActivity extends AppCompatActivity {
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
+    }
+
+    @Override
+    public void onAddTripBtnClicked(Fire_Trip theTrip) {
+        FirebaseFirestore mFS_Store = FirebaseFirestore.getInstance();
+        FirebaseUser mCurUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(mCurUser != null){
+            FirestoreAdds.addFS_trip(mContext, mFS_Store, new Fire_User(mCurUser), theTrip);
+            Toast.makeText(mContext, "Making a trip...", Toast.LENGTH_SHORT).show();
+        }
+        else
+            Toast.makeText(mContext, "mCurUser is null", Toast.LENGTH_LONG).show();
     }
 }

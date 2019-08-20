@@ -69,6 +69,20 @@
     <string name="trip_hint_endDate">End</string>
     <string name="trip_hint_gps">Use GPS?</string>
 
+    <string name="trip_sheet_gps">GPS coords:</string>
+    <string name="trip_sheet_gps_hint">Look for GPS coordinates</string>
+    <string name="trip_sheet_lat_box">Latitude</string>
+    <string name="trip_sheet_lon_box">Longitude</string>
+    <string name="trip_sheet_name">Name:</string>
+    <string name="trip_sheet_name_box">Trip Name*</string>
+    <string name="trip_sheet_desc">Description:</string>
+    <string name="trip_sheet_desc_box">Trip Description</string>
+    <string name="trip_sheet_dates">Dates:</string>
+    <string name="trip_sheet_from_box">From</string>
+    <string name="trip_sheet_until_box">Until</string>
+    <string name="trip_sheet_add_btn">Add Trip</string>
+    <string name="trip_sheet_add_hint">Create the Trip</string>
+
     <string name="fishevent_hint_species">Species</string>
     <string name="fishevent_hint_released">Released?</string>
     <string name="fishevent_hint_desc">Description</string>
