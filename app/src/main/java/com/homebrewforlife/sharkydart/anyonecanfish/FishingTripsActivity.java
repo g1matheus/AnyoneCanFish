@@ -317,6 +317,7 @@ public class FishingTripsActivity extends AppCompatActivity implements TripDetai
         FirebaseFirestore mFS_Store = FirebaseFirestore.getInstance();
         FirebaseUser mCurUser = FirebaseAuth.getInstance().getCurrentUser();
         if(mCurUser != null){
+            Log.d(LOG_TAG,"user:good, add the trip...");
             FirestoreAdds.addFS_trip(mContext, mFS_Store, new Fire_User(mCurUser), theTrip);
             Toast.makeText(mContext, "Making a trip...", Toast.LENGTH_SHORT).show();
         }
