@@ -55,6 +55,19 @@ public class TripDetailsSheet extends BottomSheetDialogFragment implements DateP
             @Override
             public void onClick(View view) {
                 dateStart = true;
+                if(etStart.getText().toString().length() == 0){
+//                    try{
+//                        Calendar cal = Calendar.getInstance();
+//                        String strDate = cal.get(Calendar.YEAR) + "-" + cal.get(Calendar.MONTH) + "-" + cal.get(Calendar.DATE);
+//                        datePickerDialog.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+//                        Log.d(LOG_TAG, strDate);
+//                    }catch (Exception e){
+//                        e.printStackTrace();
+//                    }
+                }else{
+//                    Date.valueOf(etStart.getText().toString());
+//                    datePickerDialog.updateDate();
+                }
                 datePickerDialog.show();
             }
         });
@@ -124,10 +137,15 @@ public class TripDetailsSheet extends BottomSheetDialogFragment implements DateP
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        if(dateStart)
+        String theDate = year + "-" + month + "-" + day;
+        if(dateStart) {
+            etStart.setText(theDate);
             Log.d(LOG_TAG, "START_DATE - year: " + year + " month: " + month + " day: " + day);
-        else
+        }
+        else {
+            etEnd.setText(theDate);
             Log.d(LOG_TAG, "END_DATE - year: " + year + " month: " + month + " day: " + day);
+        }
     }
 
     public interface TripSheetListener{
