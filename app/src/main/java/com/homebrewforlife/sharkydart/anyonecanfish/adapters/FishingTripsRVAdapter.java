@@ -56,13 +56,21 @@ public class FishingTripsRVAdapter extends RecyclerView.Adapter<FishingTripsRVAd
                     mTripsArrayList.indexOf(theTrip));
         }
     };
+    private final View.OnClickListener mEditBtnOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Fire_Trip theTrip = (Fire_Trip)view.getTag();
+            Log.d("fart", "Clicked edit btn for: " + theTrip.getUid() + " " + theTrip.getDesc() + " " + theTrip.getName());
+
+        }
+    };
     private final View.OnClickListener mTripOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Fire_Trip theTrip = (Fire_Trip)view.getTag();
             Log.d("fart", "Clicked trip: " + theTrip.getUid() + " " + theTrip.getDesc() + " " + theTrip.getName());
             //Intent intent = new Intent(mContext, TripDetailActivity.class);
-            //intent.putExtra(TackleBoxesActivity.THE_TACKLEBOX, theTrip);
+            //intent.putExtra(FishEventsActivity.THE_TACKLEBOX, theTrip);
             //mContext.startActivity(intent);
         }
     };
@@ -85,7 +93,7 @@ public class FishingTripsRVAdapter extends RecyclerView.Adapter<FishingTripsRVAd
         holder.mTvTripDesc.setText(mTripsArrayList.get(position).getDesc());
 
         if(mTripsArrayList.get(position).getImage_url() != null && !mTripsArrayList.get(position).getImage_url().isEmpty())
-            Picasso.get().load(mTripsArrayList.get(position).getImage_url())
+            Picasso.get().load(mTripsArrayList.get(position).getImage_url()).error(R.drawable.default_trip)
                     .into(holder.mImgTripPic);
         else
             Picasso.get().load(R.drawable.default_trip)  //need default trip Image
@@ -93,6 +101,8 @@ public class FishingTripsRVAdapter extends RecyclerView.Adapter<FishingTripsRVAd
 
         holder.mImgPicker.setTag(mTripsArrayList.get(position));
         holder.mImgPicker.setOnClickListener(mPhotoBtnOnClickListener);
+        holder.mEditDetails.setTag(mTripsArrayList.get(position));
+        holder.mEditDetails.setOnClickListener(mEditBtnOnClickListener);
 
         holder.mImgTripPic.setTag(mTripsArrayList.get(position));
         holder.mImgTripPic.setOnClickListener(mTripOnClickListener);
@@ -108,6 +118,7 @@ public class FishingTripsRVAdapter extends RecyclerView.Adapter<FishingTripsRVAd
         TextView mTvTripName;
         ImageView mImgTripPic;
         ImageButton mImgPicker;
+        ImageButton mEditDetails;
 
         ViewHolder(View view) {
             super(view);
@@ -115,6 +126,7 @@ public class FishingTripsRVAdapter extends RecyclerView.Adapter<FishingTripsRVAd
             mTvTripName = view.findViewById(R.id.tvTripName);
             mImgTripPic = view.findViewById(R.id.imgTripPic);
             mImgPicker = view.findViewById(R.id.btnImgPicker);
+            mEditDetails = view.findViewById(R.id.btnEditDetails);
         }
     }
 

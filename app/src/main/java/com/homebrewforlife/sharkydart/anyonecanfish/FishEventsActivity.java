@@ -30,6 +30,7 @@ import com.homebrewforlife.sharkydart.anyonecanfish.models.Fire_User;
 import java.util.ArrayList;
 
 public class FishEventsActivity extends AppCompatActivity {
+    public static final String THE_EVENTS = "homebrew-sharkydart-fish-events";
 
     ArrayList<Fire_FishEvent> mFishEventArrayList;
     FishEventsRVAdapter mFishEventRVAdapter;

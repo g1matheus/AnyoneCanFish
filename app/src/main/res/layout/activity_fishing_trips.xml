@@ -19,15 +19,15 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/content_fishing_trips" />
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fishingtrips_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+        android:layout_gravity="top|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/plus_sign" />
+
+    <include layout="@layout/content_fishing_trips" />
+
 
 </android.support.design.widget.CoordinatorLayout>

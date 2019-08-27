@@ -91,8 +91,8 @@ public class TripDetailsSheet extends BottomSheetDialogFragment implements DateP
                         newTrip.setName(etName.getText().toString());
                         newTrip.setDesc(etDesc.getText().toString());
                         Log.d(LOG_TAG,"name and desc found and set");
-//                        newTrip.setDateStart(dateToTimestamp());
-//                        newTrip.setDateEnd(new Timestamp(Date.valueOf(etEnd.getText().toString())));
+                        newTrip.setDateStart(new Timestamp(Date.valueOf(etStart.getText().toString())));
+                        newTrip.setDateEnd(new Timestamp(Date.valueOf(etEnd.getText().toString())));
                         Log.d(LOG_TAG,"dates found and set");
 //                        newTrip.setLatitude(Double.parseDouble(etLat.getText().toString()));
 //                        newTrip.setLongitude(Double.parseDouble(etLon.getText().toString()));
@@ -137,14 +137,15 @@ public class TripDetailsSheet extends BottomSheetDialogFragment implements DateP
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        String theDate = year + "-" + month + "-" + day;
+        // month is a 0-based value, while the rest aren't, apparently: need to add 1 to month
+        String theDate = year + "-" + (month + 1) + "-" + day;
         if(dateStart) {
             etStart.setText(theDate);
-            Log.d(LOG_TAG, "START_DATE - year: " + year + " month: " + month + " day: " + day);
+            Log.d(LOG_TAG, "START_DATE - year: " + year + " month: " + (month+1) + " day: " + day);
         }
         else {
             etEnd.setText(theDate);
-            Log.d(LOG_TAG, "END_DATE - year: " + year + " month: " + month + " day: " + day);
+            Log.d(LOG_TAG, "END_DATE - year: " + year + " month: " + (month+1) + " day: " + day);
         }
     }
 

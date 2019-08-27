@@ -42,15 +42,28 @@
                 android:textColor="@color/paper_300"
                 android:textSize="24sp"
                 tools:text="Trip Name" />
-            <ImageButton
-                android:id="@+id/btnImgPicker"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_gravity="bottom|end"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:contentDescription="@string/trip_image_picker"
-                android:background="@android:drawable/ic_menu_gallery" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageButton
+                    android:id="@+id/btnEditDetails"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_gravity="top|start"
+                    android:background="@android:drawable/ic_menu_edit"
+                    android:contentDescription="@string/trip_edit_button" />
+                <ImageButton
+                    android:id="@+id/btnImgPicker"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@android:drawable/ic_menu_gallery"
+                    android:contentDescription="@string/trip_image_picker"/>
+            </LinearLayout>
         </FrameLayout>
 
         <TextView
